@@ -47,3 +47,20 @@ $ git checkout <step-number>    # eg: git checkout step-1
 * [step-13](https://github.com/kabirbaidhya/react-todo-app/commits/step-13) - Refactor code and design improvements.
 * [step-14](https://github.com/kabirbaidhya/react-todo-app/commits/step-14) - Refactor and separate UI & stateful components.
 * [step-15](https://github.com/kabirbaidhya/react-todo-app/commits/step-15) - Finalization of TodoApp.
+
+## Module Documentation
+
+For easier onboarding, module-level documentation is available throughout the codebase. Each module folder contains a README file that explains its purpose, contents, and usage.
+
+| Module | Path | Description |
+|--------|------|-------------|
+| [Source Code](src/README.md) | `src/` | Overview of the source directory structure and navigation |
+| [Services](src/services/README.md) | `src/services/` | Business logic layer for todo, filter, and mode operations |
+| [Components](src/components/README.md) | `src/components/` | React component organization and hierarchy overview |
+| [UI Components](src/components/ui/README.md) | `src/components/ui/` | Presentational components catalog with props documentation |
+| [Wrappers](src/components/wrappers/README.md) | `src/components/wrappers/` | State management and event handling components |
+| [HOC](src/components/hoc/README.md) | `src/components/hoc/` | Higher-order component patterns and usage |
+| [Utilities](src/util/README.md) | `src/util/` | Helper functions for common operations |
+| [Assets](src/assets/README.md) | `src/assets/` | Static assets including images, styles, and locale constants |
+
+Start with the [Source Code](src/README.md) README for a guided tour of the codebase.
