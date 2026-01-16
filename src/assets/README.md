@@ -38,7 +38,7 @@ The `index.css` file provides styling for:
 - **Filter buttons**: `.filters` with hover and selected states using semi-transparent red borders
 - **Icon buttons**: `.buttons .add` and `.buttons .search` classes referencing the SVG icons
 
-This stylesheet works alongside Bootstrap CSS, which is imported separately in `src/index.js`.
+This stylesheet works alongside Bootstrap CSS, which is imported separately in `src/index.tsx`.
 
 ### text/
 
@@ -46,9 +46,9 @@ Contains locale string constants for internationalization support.
 
 | File | Description |
 |------|-------------|
-| `en_US.js` | English (US) locale constants |
+| `en_US.ts` | English (US) locale constants |
 
-The `en_US.js` file exports three string constants:
+The `en_US.ts` file exports three string constants with TypeScript const assertions for literal types:
 
 | Constant | Value | Usage |
 |----------|-------|-------|
@@ -56,15 +56,15 @@ The `en_US.js` file exports three string constants:
 | `INFO_SHORTCUT_KEYS` | "Press \`/\` to search and \`N\` to create a new item." | Keyboard shortcut hints shown in default mode |
 | `INFO_CANCEL_SHORTCUT_KEY` | "Press \`Esc\` to cancel." | Hint shown during search or create mode |
 
-This structure enables future internationalization by adding additional locale files (e.g., `es_ES.js`, `fr_FR.js`).
+This structure enables future internationalization by adding additional locale files (e.g., `es_ES.ts`, `fr_FR.ts`).
 
 ## Usage
 
 ### Importing Styles
 
-The global stylesheet is imported as a side effect in `src/index.js`:
+The global stylesheet is imported as a side effect in `src/index.tsx`:
 
-```javascript
+```typescript
 import './assets/style/index.css';
 ```
 
@@ -86,18 +86,20 @@ The SVG icons are not imported directly in JavaScript. Instead, they are referen
 
 Components import specific constants from the locale file:
 
-```javascript
-// In FilteredList.js
+```typescript
+// In FilteredList.tsx
 import { MSG_NO_ITEMS } from '../../assets/text/en_US';
 
-// In Info.js
+// In Info.tsx
 import { INFO_SHORTCUT_KEYS, INFO_CANCEL_SHORTCUT_KEY } from '../../assets/text/en_US';
 ```
+
+> **Note:** The `en_US.ts` file uses TypeScript const assertions (`as const`) which provide literal types instead of general `string` types. This enables better type inference and compile-time checking when these constants are used throughout the application.
 
 ## Related
 
 - [components/ui/](../components/ui/README.md) — UI components that consume these assets
-  - `FilteredList.js` uses `MSG_NO_ITEMS` for empty state
-  - `Info.js` uses `INFO_SHORTCUT_KEYS` and `INFO_CANCEL_SHORTCUT_KEY` for hints
-  - `ButtonWrapper.js` displays icons via CSS classes defined in `index.css`
+  - `FilteredList.tsx` uses `MSG_NO_ITEMS` for empty state
+  - `Info.tsx` uses `INFO_SHORTCUT_KEYS` and `INFO_CANCEL_SHORTCUT_KEY` for hints
+  - `ButtonWrapper.tsx` displays icons via CSS classes defined in `index.css`
 - [src/](../README.md) — Source overview and entry point documentation
