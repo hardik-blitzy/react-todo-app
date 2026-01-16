@@ -1,4 +1,4 @@
-import KeyCode from 'keycode-js';
+import { KEY_RETURN } from 'keycode-js';
 import { compose, withState, withHandlers } from 'recompose';
 
 export default compose(
@@ -10,7 +10,7 @@ export default compose(
         handleKeyUp: ({ addNew, setValue }) => e => {
             const text = e.target.value.trim();
 
-            if (e.keyCode === KeyCode.KEY_RETURN && text) {
+            if (e.keyCode === KEY_RETURN && text) {
                 addNew(text);
                 setValue('');
             }
