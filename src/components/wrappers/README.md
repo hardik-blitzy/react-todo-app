@@ -2,33 +2,49 @@
 
 > ← Back to [Components](../README.md) | [Main README](../../../README.md)
 
+## What are Wrapper Components?
+
+Welcome! If you're new here, this is a great place to understand how the app manages its data.
+
+**Think of wrapper components like the backstage crew at a theater** — you don't see them on stage, but they make everything work smoothly behind the scenes. While the [UI components](../ui/README.md) focus on looking good and displaying things to users, wrapper components focus on **remembering things** and **responding to actions**.
+
+Here's what they do in simple terms:
+
+- **Keep track of your app's data** (like your list of todos and the current filter)
+- **Provide "buttons"** that child components can press to change that data
+- **Listen for keyboard shortcuts** so you can use the app without clicking
+
+Don't worry if this seems complex at first! Once you understand that **data flows down** (from wrappers to UI components) and **actions flow up** (from UI components back to wrappers), everything else makes sense.
+
+---
+
 ## Overview
 
-Wrapper components handle application state and global event listening. They form the outer shell of the application, providing data and action methods to child components. Unlike presentational components in the `ui/` folder, wrappers do not render visible UI elements themselves. Instead, they manage cross-cutting concerns and pass information down to their children.
+These are the organizers of your app. They keep track of your data and pass it down to the visual components. There are just three files here, and each has a specific job:
 
 ## Contents
 
-| File | Purpose |
-|------|---------|
-| `App.js` | Application root that composes the provider hierarchy |
-| `StateProvider.js` | Manages application state and provides action methods |
-| `KeyStrokeHandler.js` | Listens for global keyboard events and triggers mode changes |
+| File | What It Does |
+|------|--------------|
+| `App.js` | The entry point — connects all the pieces together like Russian nesting dolls |
+| `StateProvider.js` | The app's memory — remembers your todos, current filter, and what mode you're in |
+| `KeyStrokeHandler.js` | The keyboard listener — watches for keypresses and switches modes |
 
 ---
 
 ## App.js
 
-**Purpose**: Application root composition. This is the main entry component imported by `src/index.js`.
+**What it does:** This is where everything comes together. It's the main component that gets loaded when the app starts.
 
-### Nesting Structure
+### How It Nests Components
 
-App creates a provider hierarchy by nesting components in this order:
+Think of App.js like Russian nesting dolls — it wraps components inside other components in a specific order:
 
-1. **StateProvider** — Holds and manages all application state
-2. **KeyStrokeHandler** — Intercepts keyboard events for mode switching
-3. **TodoList** — The main UI component that renders the application interface
+1. **StateProvider** (outermost) — Holds all the app's data
+2. **KeyStrokeHandler** (middle) — Listens for keyboard shortcuts
+3. **TodoList** (innermost) — The actual UI you see on screen
 
-### Component Hierarchy
+Here's what that looks like in code:
 
 ```jsx
 <StateProvider>
@@ -38,49 +54,51 @@ App creates a provider hierarchy by nesting components in this order:
 </StateProvider>
 ```
 
-This structure ensures that `TodoList` and all its descendants have access to both state data and keyboard event handling.
+This nesting ensures that `TodoList` (and everything inside it) can access both the app's data and respond to keyboard shortcuts. Pretty clever, right?
 
 ---
 
 ## StateProvider.js
 
-**Purpose**: Centralized state container for the application. This component holds all application state in its React component state and provides action methods that child components can call to update that state.
+**What it does:** This is the memory of your app. It remembers your todos, what filter you've selected, what you're searching for, and what mode you're in. It also provides the "remote control buttons" (we call them actions) that let other components change this data.
 
-### State Shape
+### The App's Memory (State)
 
-| Property | Type | Initial Value | Description |
-|----------|------|---------------|-------------|
-| `query` | string | `''` | Current search query text |
-| `mode` | string | `MODE_CREATE` | Current UI mode (create, search, or none) |
-| `filter` | string | `FILTER_ALL` | Current filter selection (all, active, or completed) |
-| `list` | array | `getAll()` | Array of todo items |
+Think of state as your app's memory — it remembers things that can change. Here's what it keeps track of:
 
-### Action Methods
+| What | Type | Starts As | What It Means |
+|------|------|-----------|---------------|
+| `query` | text | `''` (empty) | What you're searching for when in search mode |
+| `mode` | text | `MODE_CREATE` | What the app is doing — Create mode, Search mode, or just browsing |
+| `filter` | text | `FILTER_ALL` | Which todos to show — All, Active, or Completed |
+| `list` | array | sample todos | Your todo items (starts with some examples) |
 
-These methods are exposed to child components through the `actions` prop:
+### The Remote Control (Actions)
 
-| Method | Parameters | Description |
-|--------|------------|-------------|
-| `addNew` | `text: string` | Adds a new todo item with the given text |
-| `changeFilter` | `filter: string` | Updates the filter selection |
-| `changeStatus` | `itemId: number, completed: boolean` | Updates the completion status of a todo item |
-| `changeMode` | `mode: string` | Changes the current UI mode |
-| `setSearchQuery` | `text: string` | Updates the search query string |
+Actions are like buttons on a remote control — each one does something specific to change the app's state. Child components call these methods when they need to update something:
 
-### How It Works
+| Button (Method) | What You Give It | What It Does |
+|-----------------|------------------|--------------|
+| `addNew(text)` | The text of your new todo | Adds a new todo to your list |
+| `changeFilter(filter)` | Which filter to use | Switches which todos you see (All, Active, or Completed) |
+| `changeStatus(id, completed)` | Todo ID and true/false | Marks a todo as done or not done |
+| `changeMode(mode)` | Which mode to switch to | Switches between creating, searching, and browsing |
+| `setSearchQuery(text)` | What to search for | Updates what you're searching for |
 
-StateProvider uses two helper functions from `util/common.js`:
+### How It Works Behind the Scenes
 
-- **`objectWithOnly()`** — Creates an object containing only the specified action methods, bound to the StateProvider instance
-- **`wrapChildrenWith()`** — Clones child components and injects additional props (`data` and `actions`)
+StateProvider uses two helper functions from our [utilities](../../util/README.md):
 
-Children receive:
-- `data` — The current state object
-- `actions` — An object containing the action methods listed above
+- **`objectWithOnly()`** — Creates a neat package of just the action methods, ready to pass to children
+- **`wrapChildrenWith()`** — Hands down the `data` and `actions` to all child components
 
-### State Flow
+Every child component receives:
+- **`data`** — The current state (todos, filter, mode, search query)
+- **`actions`** — The remote control buttons to change things
 
-The following diagram shows how state updates flow through the application:
+### How Data Flows Through the App
+
+Here's what happens when you interact with the app — it's like a conversation between you and your components:
 
 ```mermaid
 sequenceDiagram
@@ -98,35 +116,45 @@ sequenceDiagram
     UIComponents-->>User: Updated UI
 ```
 
+**In plain English:** You do something → the component calls an action → the state updates → the screen refreshes to show the change. That's it!
+
 ---
 
 ## KeyStrokeHandler.js
 
-**Purpose**: Global keyboard event listener that enables keyboard shortcuts for switching between UI modes.
+**What it does:** This is the keyboard listener. It watches for specific keypresses and tells the app to switch modes. Press `N` to create a new todo, `/` to search, and `Escape` to cancel.
 
-### Events
+### What It Listens For
 
-- Listens to the `keydown` event on the `window` object
-- Automatically attaches the listener when the component mounts
-- Removes the listener when the component unmounts
+This component attaches itself to the browser window and listens for `keydown` events. When you press a key:
 
-### Mode Switching Logic
-
-Uses `getNextModeByKey()` from the mode service to determine if a keypress should change the UI mode. If the new mode differs from the current mode, the component prevents the default key action and calls `changeMode()`.
+1. It checks if that key should change the mode (using the [mode service](../../services/README.md))
+2. If yes, it prevents the normal key behavior and switches modes
+3. If no, it lets the keypress do its normal thing
 
 ### Keyboard Shortcuts
 
-| Key | Action | Description |
-|-----|--------|-------------|
-| `N` | Switch to CREATE mode | Shows the input box for adding new todos |
-| `/` | Switch to SEARCH mode | Shows the search box for filtering todos |
-| `Escape` | Switch to NONE mode | Hides the input/search box |
+| Press This | What Happens | When It Works |
+|------------|--------------|---------------|
+| `N` | Opens the input box to add a new todo | When you're just browsing (not already typing) |
+| `/` | Opens the search box to filter by text | When you're just browsing (not already typing) |
+| `Escape` | Closes whatever input box is open | When you're in create or search mode |
 
-**Note**: Shortcuts only work when the current mode allows them. For example, pressing `N` or `/` only works when in NONE mode. Pressing `Escape` works in CREATE or SEARCH mode.
+**Quick tip:** These shortcuts only work when it makes sense. You can't press `N` to create a new todo if you're already in create mode — that wouldn't make sense!
 
-### Props Passthrough
+### Passing Data Along
 
-KeyStrokeHandler receives `data` and `actions` from StateProvider and passes them to its children using `wrapChildrenWith()`. This ensures the TodoList component and its descendants have access to state and actions.
+KeyStrokeHandler receives `data` and `actions` from StateProvider and passes them along to its children. This way, TodoList and all its child components can access everything they need.
+
+---
+
+## The Key Insight
+
+If you remember one thing from this page, remember this:
+
+> **Data flows down, actions flow up.**
+
+StateProvider holds the data and passes it down to children. When children need to change something, they call an action method that flows back up to StateProvider. StateProvider updates its state, and the new data flows back down again. It's a beautiful cycle!
 
 ---
 
@@ -134,16 +162,16 @@ KeyStrokeHandler receives `data` and `actions` from StateProvider and passes the
 
 ### Services
 
-These wrapper components depend on the following services:
+These wrapper components use the following services to do their work:
 
-- [mode.js](../../services/README.md) — Defines `MODE_CREATE`, `MODE_SEARCH`, `MODE_NONE` constants and `getNextModeByKey()` function
-- [filter.js](../../services/README.md) — Defines `FILTER_ALL`, `FILTER_ACTIVE`, `FILTER_COMPLETED` constants
-- [todo.js](../../services/README.md) — Provides `getAll()`, `addToList()`, and `updateStatus()` functions
+- [mode.js](../../services/README.md) — Defines the modes (`MODE_CREATE`, `MODE_SEARCH`, `MODE_NONE`) and the `getNextModeByKey()` function
+- [filter.js](../../services/README.md) — Defines the filters (`FILTER_ALL`, `FILTER_ACTIVE`, `FILTER_COMPLETED`)
+- [todo.js](../../services/README.md) — Handles todo operations like `getAll()`, `addToList()`, and `updateStatus()`
 
 ### Utilities
 
-- [common.js](../../util/README.md) — Provides `objectWithOnly()` and `wrapChildrenWith()` helper functions
+- [common.js](../../util/README.md) — Helper functions `objectWithOnly()` and `wrapChildrenWith()`
 
 ### Related Components
 
-- [UI Components](../ui/README.md) — Presentational components that receive state and actions from these wrappers
+- [UI Components](../ui/README.md) — The visual components that receive state and actions from these wrappers
