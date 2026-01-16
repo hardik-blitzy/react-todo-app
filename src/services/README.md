@@ -6,11 +6,13 @@
 
 This folder contains three pure business logic modules with no React dependencies. The services handle:
 
-- **Todo data operations** (`todo.js`) — CRUD operations for todo items
-- **List filtering and searching** (`filter.js`) — Filter by status and search by text
-- **UI mode state management** (`mode.js`) — Keyboard-driven mode transitions
+- **Todo data operations** (`todo.ts`) — CRUD operations for todo items
+- **List filtering and searching** (`filter.ts`) — Filter by status and search by text
+- **UI mode state management** (`mode.ts`) — Keyboard-driven mode transitions
 
 All functions are pure and side-effect free. This makes them safe to call from render methods, reducers, or any other context where predictable behavior is required.
+
+> **Note:** These services are fully typed with TypeScript. Type definitions can be imported from `../types/` for use throughout the application.
 
 ## Service Relationship Diagram
 
@@ -19,9 +21,9 @@ The following diagram shows how the services relate to each other and their cons
 ```mermaid
 flowchart TB
     subgraph services["services/"]
-        TODO["todo.js"]
-        FILTER["filter.js"]
-        MODE["mode.js"]
+        TODO["todo.ts"]
+        FILTER["filter.ts"]
+        MODE["mode.ts"]
     end
     
     subgraph deps["External Dependencies"]
@@ -29,8 +31,12 @@ flowchart TB
         KEY["keycode-js"]
     end
     
-    subgraph util["util/"]
-        COMMON["common.js"]
+    subgraph utils["utils/"]
+        COMMON["common.ts"]
+    end
+    
+    subgraph types["types/"]
+        TYPES["todo.types.ts, mode.types.ts"]
     end
     
     subgraph consumers["Consumers"]
@@ -38,8 +44,11 @@ flowchart TB
     end
     
     TODO --> IMM
+    TODO --> TYPES
     FILTER --> COMMON
+    FILTER --> TYPES
     MODE --> KEY
+    MODE --> TYPES
     COMP --> TODO
     COMP --> FILTER
     COMP --> MODE
@@ -49,44 +58,47 @@ flowchart TB
 
 | File | Purpose |
 |------|---------|
-| `todo.js` | Todo item CRUD operations with immutable data handling |
-| `filter.js` | List filtering by status and text search |
-| `mode.js` | UI mode state machine with keyboard navigation |
+| `todo.ts` | Todo item CRUD operations with immutable data handling |
+| `filter.ts` | List filtering by status and text search |
+| `mode.ts` | UI mode state machine with keyboard navigation |
 
 ---
 
-## todo.js
+## todo.ts
 
 Provides todo item CRUD operations with immutable data handling. Uses `immutability-helper` to return new arrays instead of mutating existing data.
+
+### Type Definitions
+
+The Todo type is imported from the shared types module:
+
+```typescript
+import type { Todo } from '../types';
+
+interface Todo {
+  id: number;        // Unique identifier
+  text: string;      // Todo item text
+  completed: boolean; // Completion status
+}
+```
 
 ### API Reference
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `getAll()` | none | `Array` | Returns array of sample todo items `{id, text, completed}` |
-| `getItemById(itemId)` | `itemId: number` | `Object` | Finds and returns a todo item by its id |
-| `updateStatus(items, itemId, completed)` | `items: Array`, `itemId: number`, `completed: boolean` | `Array` | Returns new list with updated item status (immutable) |
-| `addToList(list, data)` | `list: Array`, `data: Object` | `Array` | Returns new list with added item, auto-generates id |
-
-### Data Structure
-
-Each todo item has the following shape:
-
-```javascript
-{
-    id: number,        // Unique identifier
-    text: string,      // Todo item text
-    completed: boolean // Completion status
-}
-```
+| `getAll()` | none | `Todo[]` | Returns array of sample todo items |
+| `getItemById(itemId)` | `itemId: number` | `Todo \| undefined` | Finds and returns a todo item by its id |
+| `updateStatus(items, itemId, completed)` | `items: Todo[]`, `itemId: number`, `completed: boolean` | `Todo[]` | Returns new list with updated item status (immutable) |
+| `addToList(list, data)` | `list: Todo[]`, `data: Omit<Todo, 'id'>` | `Todo[]` | Returns new list with added item, auto-generates id |
 
 ### Usage Example
 
-```javascript
+```typescript
 import { getAll, addToList, updateStatus } from '../services/todo';
+import type { Todo } from '../types';
 
 // Initialize list with sample data
-const list = getAll();
+const list: Todo[] = getAll();
 // [
 //   { id: 1, text: 'Learn Javascript', completed: false },
 //   { id: 2, text: 'Learn React', completed: false },
@@ -94,74 +106,100 @@ const list = getAll();
 // ]
 
 // Add a new item (id is auto-generated)
-const newList = addToList(list, { text: 'Write tests', completed: false });
+const newList: Todo[] = addToList(list, { text: 'Write tests', completed: false });
 
 // Update item status to completed
-const updatedList = updateStatus(list, 1, true);
+const updatedList: Todo[] = updateStatus(list, 1, true);
 // Item with id 1 now has completed: true
 ```
 
 ---
 
-## filter.js
+## filter.ts
 
-Provides list filtering and search functionality. Uses `stringInclues` from `util/common.js` for case-insensitive text matching.
+Provides list filtering and search functionality. Uses `stringIncludes` from `utils/common` for case-insensitive text matching.
+
+> **Note:** The function name was corrected from the original `stringInclues` typo to `stringIncludes`.
+
+### Type Definitions
+
+```typescript
+import type { Todo } from '../types';
+import type { FilterOption } from '../types';
+
+type FilterOption = 'all' | 'active' | 'completed';
+```
 
 ### Constants
 
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `FILTER_ALL` | `'all'` | Show all items regardless of status |
-| `FILTER_ACTIVE` | `'active'` | Show only incomplete items |
-| `FILTER_COMPLETED` | `'completed'` | Show only completed items |
+| Constant | Value | Type | Description |
+|----------|-------|------|-------------|
+| `FILTER_ALL` | `'all'` | `FilterOption` | Show all items regardless of status |
+| `FILTER_ACTIVE` | `'active'` | `FilterOption` | Show only incomplete items |
+| `FILTER_COMPLETED` | `'completed'` | `FilterOption` | Show only completed items |
 
 ### Functions
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `applyFilter(list, filter)` | `list: Array`, `filter: string` | `Array` | Filters list by completion status |
-| `search(list, query)` | `list: Array`, `query: string` | `Array` | Filters list by text search (case-insensitive) |
-| `getOptions()` | none | `Object` | Returns filter options `{all: 'All', active: 'Active', completed: 'Completed'}` |
+| `applyFilter(list, filter)` | `list: Todo[]`, `filter: FilterOption` | `Todo[]` | Filters list by completion status |
+| `search(list, query)` | `list: Todo[]`, `query: string` | `Todo[]` | Filters list by text search (case-insensitive) |
+| `getOptions()` | none | `Record<FilterOption, string>` | Returns filter options `{all: 'All', active: 'Active', completed: 'Completed'}` |
 
 ### Usage Example
 
-```javascript
-import { applyFilter, search, getOptions, FILTER_ACTIVE, FILTER_COMPLETED } from '../services/filter';
+```typescript
+import { 
+  applyFilter, 
+  search, 
+  getOptions, 
+  FILTER_ACTIVE, 
+  FILTER_COMPLETED 
+} from '../services/filter';
+import type { Todo, FilterOption } from '../types';
 
 // Get only active (incomplete) items
-const activeItems = applyFilter(list, FILTER_ACTIVE);
+const activeItems: Todo[] = applyFilter(list, FILTER_ACTIVE);
 
 // Get only completed items
-const completedItems = applyFilter(list, FILTER_COMPLETED);
+const completedItems: Todo[] = applyFilter(list, FILTER_COMPLETED);
 
 // Search items by text (case-insensitive)
-const searchResults = search(list, 'react');
+const searchResults: Todo[] = search(list, 'react');
 // Returns items where text includes 'react'
 
 // Get filter options for rendering buttons
-const options = getOptions();
+const options: Record<FilterOption, string> = getOptions();
 // { all: 'All', active: 'Active', completed: 'Completed' }
 ```
 
 ---
 
-## mode.js
+## mode.ts
 
 Manages UI mode state with keyboard navigation support. Implements a simple state machine that determines mode transitions based on keyboard input.
 
+### Type Definitions
+
+```typescript
+import type { Mode } from '../types';
+
+type Mode = 'none' | 'search' | 'create';
+```
+
 ### Constants
 
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `MODE_NONE` | `'none'` | Default mode, no input active |
-| `MODE_SEARCH` | `'search'` | Search input is active |
-| `MODE_CREATE` | `'create'` | Create new todo input is active |
+| Constant | Value | Type | Description |
+|----------|-------|------|-------------|
+| `MODE_NONE` | `'none'` | `Mode` | Default mode, no input active |
+| `MODE_SEARCH` | `'search'` | `Mode` | Search input is active |
+| `MODE_CREATE` | `'create'` | `Mode` | Create new todo input is active |
 
 ### Functions
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `getNextModeByKey(current, keyPressed)` | `current: string`, `keyPressed: number` | `string` | State machine for keyboard-driven mode transitions |
+| `getNextModeByKey(current, keyPressed)` | `current: Mode`, `keyPressed: number` | `Mode` | State machine for keyboard-driven mode transitions |
 
 ### Keyboard Mapping
 
@@ -186,12 +224,13 @@ stateDiagram-v2
 
 ### Usage Example
 
-```javascript
+```typescript
 import { getNextModeByKey, MODE_NONE, MODE_SEARCH, MODE_CREATE } from '../services/mode';
+import type { Mode } from '../types';
 import { KEY_SLASH, KEY_N, KEY_ESCAPE } from 'keycode-js';
 
 // Start in default mode
-let currentMode = MODE_NONE;
+let currentMode: Mode = MODE_NONE;
 
 // User presses "/" key
 currentMode = getNextModeByKey(currentMode, KEY_SLASH);
@@ -208,8 +247,22 @@ currentMode = getNextModeByKey(currentMode, KEY_N);
 
 ---
 
+## Importing Types
+
+All type definitions used by these services are centralized in the `types/` directory. When using these services in your components or hooks, import types as follows:
+
+```typescript
+import type { Todo, Mode, FilterOption } from '../types';
+```
+
+This ensures consistent type usage across the application and supports TypeScript's module augmentation.
+
+---
+
 ## Related
 
-- [components/wrappers/](../components/wrappers/README.md) — Components that consume these services
-- [util/](../util/README.md) — Utility module used by `filter.js`
+- [components/](../components/README.md) — Components that consume these services
+- [utils/](../utils/README.md) — Utility module used by `filter.ts`
+- [types/](../types/index.ts) — Type definitions for services
+- [hooks/](../hooks/index.ts) — Custom hooks that wrap service functionality
 - [src/](../README.md) — Source code overview
