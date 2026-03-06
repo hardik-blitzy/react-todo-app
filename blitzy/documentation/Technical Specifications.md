@@ -4,1021 +4,810 @@
 
 ## 0.1 Intent Clarification
 
-### 0.1.1 Core Documentation Objective
+Based on the prompt, the Blitzy platform understands that the refactoring objective is to modernize a legacy React TODO application by applying industry best practices and design principles to improve code quality, maintainability, and scalability.
 
-Based on the provided requirements, the Blitzy platform understands that the documentation objective is to **create module-wise README files throughout the React Todo App codebase that provide clear onboarding paths for new developers**. The primary intent is to improve code discoverability and comprehension by adding focused documentation at the module level, with cross-references back to the main README.md.
+### 0.1.1 Core Refactoring Objective
 
-**Request Category**: Create new documentation  
-**Documentation Type**: Module README files for developer onboarding
+**Refactoring Type:** Code structure improvement + Tech stack modernization + Design pattern application
 
-**Requirement Breakdown with Enhanced Clarity**:
+**Target Repository:** Same repository (in-place refactoring)
 
-| Requirement | Interpretation | Implementation Approach |
-|------------|----------------|------------------------|
-| "Add module wise readme files" | Create README.md files within each logical module directory | One README per major folder under `src/` |
-| "Reference those back to main readme files" | Include navigation links connecting module docs to root README | Add consistent link headers in each module README |
-| "Make it easy for new developers to onboard" | Provide clear explanations of purpose, APIs, and usage patterns | Focus on "what", "why", and "how to use" for each module |
-| "Clear and concise English" | Avoid jargon, use direct language, keep paragraphs focused | Write at a level accessible to junior developers |
-| "Simple and neutral language" | Avoid opinionated statements, remain factual | Document behavior without prescribing patterns |
+**Primary Goals:**
+- Apply DRY (Don't Repeat Yourself) principle to eliminate code duplication
+- Implement SOLID principles adapted for React functional programming:
+  - **Single Responsibility Principle (SRP):** Each component should handle only one concern
+  - **Open/Closed Principle (OCP):** Components should be extensible without modification
+  - **Interface Segregation Principle (ISP):** Components should not depend on props they don't use
+  - **Dependency Inversion Principle (DIP):** Depend on abstractions via proper prop drilling and context
+- Adopt modern React best practices including functional components and hooks
+- Add TypeScript for type safety and improved developer experience
 
-**Inferred Documentation Needs**:
-
-Based on the repository analysis, the following implicit documentation requirements are identified:
-
-- **Module Overview Documentation**: Each folder lacks contextual README explaining its role
-- **Component API Documentation**: UI components have props interfaces that need documentation
-- **Service Contract Documentation**: Service modules (todo.js, filter.js, mode.js) export public APIs requiring usage examples
-- **Utility Documentation**: The util/common.js module has helper functions used across the codebase
-- **Asset Documentation**: Assets folder contains icons, styles, and locale constants that need explanation
-- **Navigation Structure**: New developers need a clear path from main README to module-specific documentation
+**Implicit Requirements Surfaced:**
+- Migrate from deprecated `recompose` library to native React Hooks
+- Fix existing bugs (memory leak in `KeyStrokeHandler.js`, typo in `stringInclues`)
+- Replace legacy lifecycle methods (`componentWillMount`) with modern equivalents
+- Upgrade React from version 15.4.2 to a modern version supporting hooks (16.8+)
+- Configure TypeScript compiler and type definitions
+- Maintain backward compatibility with existing functionality
 
 ### 0.1.2 Special Instructions and Constraints
 
-**User Directives Captured**:
+**Critical Directives:**
+- Preserve all existing application functionality during refactoring
+- Maintain the same UI/UX behavior for end users
+- Keep the Bootstrap 3.4.1 styling intact
+- Ensure all keyboard shortcuts continue working as expected
 
-- Use clear and concise English
-- Employ simple and neutral language
-- Create module-wise README files (one per major module)
-- Reference module READMEs back to the main README
-- Focus on new developer onboarding ease
+**Migration Requirements:**
+- Convert all class components to functional components with hooks
+- Replace `recompose` HOC patterns (`compose`, `withState`, `withHandlers`) with `useState`, `useCallback`, and custom hooks
+- Convert all `.js` files to `.tsx` for components and `.ts` for utilities/services
 
-**Style Preferences**:
-
-| Aspect | Directive |
-|--------|-----------|
-| Tone | Neutral, instructional, welcoming to newcomers |
-| Structure | Organized by module purpose, API, and usage |
-| Depth | Sufficient for understanding without overwhelming |
-| Format | Markdown with consistent heading hierarchy |
-
-**Template Requirements**: No specific template provided by user. Documentation will follow the existing README.md style and standard React project documentation patterns.
+**Performance Improvements Expected:**
+- Eliminate unnecessary re-renders through proper memoization
+- Fix memory leaks from unbound event listeners
+- Remove deprecated libraries that increase bundle size
 
 ### 0.1.3 Technical Interpretation
 
-These documentation requirements translate to the following technical documentation strategy:
+This refactoring translates to the following technical transformation strategy:
 
-| Goal | Action | Target Files |
-|------|--------|-------------|
-| Document the services layer | Create a README explaining todo, filter, and mode services | `src/services/README.md` |
-| Document the component layer | Create a README explaining component organization and patterns | `src/components/README.md` |
-| Document UI components | Create a README listing all presentational components | `src/components/ui/README.md` |
-| Document wrapper components | Create a README for state and event handling | `src/components/wrappers/README.md` |
-| Document HOC patterns | Create a README for the higher-order component | `src/components/hoc/README.md` |
-| Document utilities | Create a README for common helper functions | `src/util/README.md` |
-| Document assets | Create a README for static assets structure | `src/assets/README.md` |
-| Document the src root | Create a README providing navigation overview | `src/README.md` |
-| Update main README | Add section referencing new module documentation | `README.md` |
-
-### 0.1.4 Inferred Documentation Needs
-
-Based on comprehensive codebase analysis, the following documentation gaps require attention:
-
-**Code Structure Gaps**:
-
-- `src/` lacks an entry-point README explaining the folder structure
-- `src/services/` contains three service modules with no documentation on their contracts
-- `src/components/` has complex organization (hoc, ui, wrappers) without navigational guidance
-- `src/util/` exports utility functions that are used across the codebase without documentation
-- `src/assets/` contains organized sub-folders for images, styles, and text with no explanation
-
-**Onboarding Path Gaps**:
-
-- No clear guidance on where to start when exploring the codebase
-- No documentation linking component hierarchy to data flow
-- No explanation of the application architecture patterns used
-- Missing keyboard shortcut documentation for the application functionality
-
-**Developer Experience Gaps**:
-
-- New developers cannot quickly understand the purpose of each folder
-- The relationship between services, components, and utilities is not documented
-- Props interfaces for components are only discoverable by reading source code
-
-
-## 0.2 Documentation Discovery and Analysis
-
-### 0.2.1 Existing Documentation Infrastructure Assessment
-
-Repository analysis reveals a minimal documentation structure with documentation coverage limited to the root-level README only.
-
-**Search Patterns Employed**:
-
-| Pattern | Results Found |
-|---------|---------------|
-| `README*` | 1 file: `./README.md` |
-| `docs/**` | No docs directory exists |
-| `*.md` in subdirectories | No markdown files found |
-| `*.mdx` | No MDX files found |
-| `*.rst` | No RST files found |
-
-**Current Documentation Inventory**:
-
-| File | Location | Purpose | Content Summary |
-|------|----------|---------|-----------------|
-| README.md | Root | Project overview and setup | Contains project description, clone instructions, install/run commands, and 16-step branch history |
-
-**Documentation Generator Analysis**:
-
-| Configuration File | Status | Notes |
-|-------------------|--------|-------|
-| mkdocs.yml | Not present | No MkDocs configuration |
-| docusaurus.config.js | Not present | No Docusaurus setup |
-| sphinx/conf.py | Not present | No Sphinx documentation |
-| .readthedocs.yml | Not present | No ReadTheDocs integration |
-| jsdoc.json | Not present | No JSDoc configuration |
-
-**Repository Analysis Findings**: Repository analysis reveals a minimal documentation structure with a single root README.md file covering project setup, demo links, and development step branches. No module-level documentation exists within the `src/` directory structure.
-
-### 0.2.2 Repository Code Analysis for Documentation
-
-**Search Patterns Used for Code to Document**:
-
-| Pattern | Target | Files Found |
-|---------|--------|-------------|
-| `src/services/*.js` | Service layer APIs | 3 files (mode.js, filter.js, todo.js) |
-| `src/components/**/*.js` | React components | 16 files across 3 subdirectories |
-| `src/util/*.js` | Utility modules | 1 file (common.js) |
-| `src/assets/**/*` | Static assets | 4 files (2 SVGs, 1 CSS, 1 JS) |
-| `src/index.js` | Application entry | 1 file |
-
-**Key Directories Examined**:
-
+**Architecture Transformation:**
 ```
+Current Architecture          →    Target Architecture
+─────────────────────────────────────────────────────────────
+React 15.4.2 (Class-based)   →    React 18.x (Functional)
+JavaScript (.js)              →    TypeScript (.ts/.tsx)
+recompose HOCs               →    React Hooks
+componentWillMount           →    useEffect
+window.addEventListener      →    useEffect with cleanup
+wrapChildrenWith utility     →    React Context API
+Manual prop injection        →    Custom hooks
+No type safety               →    Full TypeScript coverage
+```
+
+**Transformation Rules:**
+1. Every `compose(withState, withHandlers)` pattern becomes a custom hook
+2. Every class component with lifecycle methods becomes a functional component with `useEffect`
+3. Every utility function gets explicit TypeScript type annotations
+4. Every component gets a properly typed props interface
+5. All event handlers use proper cleanup patterns to prevent memory leaks
+
+## 0.2 Source Analysis
+
+### 0.2.1 Comprehensive Source File Discovery
+
+**Search Patterns Applied:**
+- Legacy patterns: `src/**/*.js` - All JavaScript files requiring TypeScript migration
+- HOC patterns: `src/components/hoc/*.js` - Recompose-based Higher Order Components
+- Class components: `src/components/wrappers/*.js` - Components with lifecycle methods
+- Utility functions: `src/util/*.js`, `src/services/*.js` - Business logic modules
+- Entry points: `src/index.js` - Application bootstrap
+
+**Current Structure Mapping:**
+```
+Current:
 src/
-├── index.js                    # Application entry point
-├── assets/                     # Static resources (0 README)
-│   ├── images/                 # SVG icons: add.svg, search.svg
-│   ├── style/                  # Global CSS: index.css
-│   └── text/                   # Locale constants: en_US.js
-├── components/                 # React component layer (0 README)
-│   ├── hoc/                    # Higher-order component: wrapInputBox.js
-│   ├── ui/                     # 12 presentational components
-│   └── wrappers/               # 3 state/event wrapper components
-├── services/                   # Business logic layer (0 README)
-│   ├── filter.js               # List filtering and search
-│   ├── mode.js                 # UI mode state management
-│   └── todo.js                 # Todo item CRUD operations
-└── util/                       # Shared utilities (0 README)
-    └── common.js               # Object/React/string helpers
+├── index.js (entry point - renders App)
+├── README.md
+├── assets/
+│   ├── README.md
+│   ├── style/
+│   │   └── index.css (Bootstrap overrides - 177 lines)
+│   └── text/
+│       └── en_US.js (localization constants - 12 exports)
+├── components/
+│   ├── README.md
+│   ├── hoc/
+│   │   ├── README.md
+│   │   └── wrapInputBox.js (recompose HOC - to be converted to hook)
+│   ├── ui/
+│   │   ├── README.md
+│   │   ├── ButtonWrapper.js (stateless functional)
+│   │   ├── CheckBox.js (stateless functional)
+│   │   ├── Filter.js (stateless functional)
+│   │   ├── FilteredList.js (stateless functional)
+│   │   ├── Footer.js (stateless functional)
+│   │   ├── Header.js (stateless functional)
+│   │   ├── Info.js (stateless functional)
+│   │   ├── InputBox.js (enhanced with wrapInputBox HOC)
+│   │   ├── InputWrapper.js (conditional rendering)
+│   │   ├── SearchBox.js (enhanced with wrapInputBox HOC)
+│   │   ├── TodoItem.js (stateless functional)
+│   │   └── TodoList.js (main container component)
+│   └── wrappers/
+│       ├── README.md
+│       ├── App.js (composition root)
+│       ├── KeyStrokeHandler.js (class component - has bug)
+│       └── StateProvider.js (class component - state management)
+├── services/
+│   ├── README.md
+│   ├── filter.js (filter business logic)
+│   ├── mode.js (application mode constants/logic)
+│   └── todo.js (todo CRUD operations)
+└── util/
+    ├── README.md
+    └── common.js (shared utilities - has typo bug)
 ```
 
-**Related Documentation Found**:
+### 0.2.2 Files Requiring Refactoring
 
-| Source | Location | Documentation Value |
-|--------|----------|---------------------|
-| JSDoc comments | `src/services/todo.js` | Partial function documentation |
-| JSDoc comments | `src/util/common.js` | Function documentation present |
-| Inline comments | `src/services/todo.js` | Counter logic explanation |
-| Import statements | All files | Dependency relationships |
+**Critical Issues Identified:**
 
-### 0.2.3 Web Search Research Conducted
+| File | Issue Type | Description | Priority |
+|------|-----------|-------------|----------|
+| `src/components/wrappers/KeyStrokeHandler.js` | Bug + Legacy | Memory leak: `removeEventListener` uses different function reference than `addEventListener`. Uses deprecated `componentWillMount`. | HIGH |
+| `src/util/common.js` | Bug | Function named `stringInclues` (typo, should be `stringIncludes`) | MEDIUM |
+| `src/components/hoc/wrapInputBox.js` | Deprecated | Uses `recompose` library which is discontinued | HIGH |
+| `src/components/wrappers/StateProvider.js` | Legacy | Class component managing application state, should use Context + Hooks | HIGH |
+| `src/components/ui/InputBox.js` | Pattern | Wrapped with HOC, should use hooks directly | MEDIUM |
+| `src/components/ui/SearchBox.js` | Pattern | Wrapped with HOC, should use hooks directly | MEDIUM |
 
-**Research Areas Investigated**:
+**Complete Source File List (21 JavaScript files):**
 
-| Topic | Key Findings |
-|-------|--------------|
-| Module README best practices for React | Place README.md files adjacent to module code; document component interfaces, props, and usage examples |
-| Documentation structure conventions | Use consistent heading hierarchy; include purpose, API, examples, and related files |
-| Developer onboarding documentation | Start with "what" and "why" before diving into "how"; provide navigation links |
-| Markdown formatting for code documentation | Use code blocks with language tags, tables for prop documentation |
+1. `src/index.js` - Entry point
+2. `src/components/wrappers/App.js` - Application root composition
+3. `src/components/wrappers/KeyStrokeHandler.js` - Global keyboard handler (class)
+4. `src/components/wrappers/StateProvider.js` - State management wrapper (class)
+5. `src/components/hoc/wrapInputBox.js` - HOC for input components
+6. `src/components/ui/ButtonWrapper.js` - Button container
+7. `src/components/ui/CheckBox.js` - Checkbox component
+8. `src/components/ui/Filter.js` - Filter option component
+9. `src/components/ui/FilteredList.js` - Filtered todo list
+10. `src/components/ui/Footer.js` - Footer with filters
+11. `src/components/ui/Header.js` - Header with input
+12. `src/components/ui/Info.js` - Info/help text component
+13. `src/components/ui/InputBox.js` - New todo input
+14. `src/components/ui/InputWrapper.js` - Conditional input wrapper
+15. `src/components/ui/SearchBox.js` - Search input
+16. `src/components/ui/TodoItem.js` - Individual todo item
+17. `src/components/ui/TodoList.js` - Main todo list container
+18. `src/services/filter.js` - Filter business logic
+19. `src/services/mode.js` - Mode constants and logic
+20. `src/services/todo.js` - Todo CRUD operations
+21. `src/util/common.js` - Shared utility functions
+22. `src/assets/text/en_US.js` - Localization strings
 
-**Best Practices Adopted**:
+## 0.3 Target Design
 
-- Create README.md files in each major folder to provide contextual documentation
-- Include a consistent structure: Overview, Contents, API/Interface, Usage Examples, Related Links
-- Reference back to parent documentation for navigation context
-- Keep documentation focused and scannable with tables and lists
-- Use simple language accessible to developers of all experience levels
+### 0.3.1 Refactored Structure Planning
 
-
-## 0.3 Documentation Scope Analysis
-
-### 0.3.1 Code-to-Documentation Mapping
-
-**Modules Requiring Documentation**:
-
-#### Services Module (`src/services/`)
-
-| Service File | Public APIs | Current Documentation | Documentation Needed |
-|-------------|-------------|----------------------|---------------------|
-| `todo.js` | `getAll()`, `getItemById()`, `updateStatus()`, `addToList()` | JSDoc comments (partial) | API reference, usage examples, data structure |
-| `filter.js` | `FILTER_ALL`, `FILTER_ACTIVE`, `FILTER_COMPLETED`, `applyFilter()`, `search()`, `getOptions()` | None | Constants documentation, function reference, examples |
-| `mode.js` | `MODE_NONE`, `MODE_SEARCH`, `MODE_CREATE`, `getNextModeByKey()` | None | State machine documentation, keyboard mapping |
-
-#### Components Module (`src/components/`)
-
-**UI Components (`src/components/ui/`)**:
-
-| Component File | Props Interface | Current Documentation | Documentation Needed |
-|---------------|-----------------|----------------------|---------------------|
-| `TodoList.js` | `data`, `actions` | None | Main container overview, prop drilling diagram |
-| `Header.js` | `addNew`, `mode`, `query`, `setSearchQuery` | None | Layout purpose, children composition |
-| `Footer.js` | `activeItemCount`, `filter`, `changeFilter`, `mode`, `changeMode` | None | Footer layout, item count display |
-| `FilteredList.js` | `items`, `changeStatus` | None | List rendering, empty state handling |
-| `TodoItem.js` | `data`, `changeStatus` | None | Item rendering, status toggle |
-| `CheckBox.js` | `checked`, `onChange` | None | Controlled checkbox pattern |
-| `InputBox.js` | Enhanced by HOC | None | Input handling, HOC integration |
-| `InputWrapper.js` | `mode`, `addNew`, `query`, `setSearchQuery` | None | Conditional input routing |
-| `SearchBox.js` | `query`, `setSearchQuery` | None | Search input control |
-| `Filter.js` | `filter`, `changeFilter` | None | Filter toggle buttons |
-| `ButtonWrapper.js` | `mode`, `changeMode` | None | Mode toggle buttons |
-| `Info.js` | `mode` | None | Keyboard shortcut hints |
-
-**Wrapper Components (`src/components/wrappers/`)**:
-
-| Component File | Purpose | Current Documentation | Documentation Needed |
-|---------------|---------|----------------------|---------------------|
-| `App.js` | Application root composition | None | Entry point, provider nesting |
-| `StateProvider.js` | Centralized state container | None | State shape, action methods, child injection |
-| `KeyStrokeHandler.js` | Global keyboard listener | None | Event handling, mode transitions |
-
-**HOC Module (`src/components/hoc/`)**:
-
-| File | Injected Props | Current Documentation | Documentation Needed |
-|------|---------------|----------------------|---------------------|
-| `wrapInputBox.js` | `value`, `setValue`, `handleChange`, `handleKeyUp` | None | HOC pattern, prop injection, usage example |
-
-#### Utilities Module (`src/util/`)
-
-| File | Exported Functions | Current Documentation | Documentation Needed |
-|------|-------------------|----------------------|---------------------|
-| `common.js` | `objectWithOnly()`, `wrapChildrenWith()`, `stringInclues()` | JSDoc comments | Usage context, integration points |
-
-#### Assets Module (`src/assets/`)
-
-| Subfolder | Contents | Current Documentation | Documentation Needed |
-|-----------|----------|----------------------|---------------------|
-| `images/` | `add.svg`, `search.svg` | None | Icon usage, sizing, styling |
-| `style/` | `index.css` | None | CSS class reference, layout structure |
-| `text/` | `en_US.js` | None | Locale constants, internationalization notes |
-
-### 0.3.2 Documentation Gap Analysis
-
-Given the requirements and repository analysis, documentation gaps include:
-
-**Undocumented Module Structures**:
-
-| Module Path | Gap Description | Priority |
-|-------------|-----------------|----------|
-| `src/` | No overview README exists | High |
-| `src/services/` | No README explaining service contracts | High |
-| `src/components/` | No README explaining component organization | High |
-| `src/components/ui/` | No README listing UI components | Medium |
-| `src/components/wrappers/` | No README for state management | High |
-| `src/components/hoc/` | No README for HOC pattern | Medium |
-| `src/util/` | No README for utility functions | Medium |
-| `src/assets/` | No README for assets organization | Low |
-
-**Missing Documentation Types**:
-
-| Documentation Type | Current Coverage | Required Actions |
-|--------------------|------------------|------------------|
-| Module overviews | 0% | Create 8 new README files |
-| API references | Partial JSDoc | Consolidate in README files |
-| Usage examples | 0% | Add code snippets in each README |
-| Navigation links | 0% | Add cross-references in all READMEs |
-| Architecture diagrams | 0% | Add Mermaid diagrams where helpful |
-
-**Navigation Gap**: Currently no way to navigate from the main README.md to module-specific documentation. New developers must explore folders blindly to understand the codebase structure.
-
-
-## 0.4 Documentation Implementation Design
-
-### 0.4.1 Documentation Structure Planning
-
-**Documentation Hierarchy**:
-
+**Target Architecture:**
 ```
-react-todo-app/
-├── README.md                           # Root (UPDATE: add module navigation section)
-└── src/
-    ├── README.md                       # NEW: Source overview and navigation
-    ├── assets/
-    │   └── README.md                   # NEW: Assets documentation
-    ├── components/
-    │   ├── README.md                   # NEW: Components layer overview
-    │   ├── hoc/
-    │   │   └── README.md               # NEW: HOC pattern documentation
-    │   ├── ui/
-    │   │   └── README.md               # NEW: UI components catalog
-    │   └── wrappers/
-    │       └── README.md               # NEW: State/event wrapper documentation
-    ├── services/
-    │   └── README.md                   # NEW: Services layer documentation
-    └── util/
-        └── README.md                   # NEW: Utilities documentation
+Target:
+src/
+├── index.tsx (entry point - typed)
+├── README.md
+├── types/
+│   ├── index.ts (shared type definitions)
+│   ├── todo.types.ts (Todo-related interfaces)
+│   └── mode.types.ts (Mode enum and types)
+├── assets/
+│   ├── README.md
+│   ├── style/
+│   │   └── index.css (unchanged - styling preserved)
+│   └── text/
+│       └── en_US.ts (typed localization constants)
+├── hooks/
+│   ├── index.ts (barrel export)
+│   ├── useInputBox.ts (replaces wrapInputBox HOC)
+│   ├── useKeyboard.ts (replaces KeyStrokeHandler class)
+│   └── useTodoState.ts (replaces StateProvider class)
+├── context/
+│   ├── index.ts (barrel export)
+│   └── TodoContext.tsx (React Context for state)
+├── components/
+│   ├── README.md
+│   ├── ui/
+│   │   ├── README.md
+│   │   ├── ButtonWrapper.tsx (typed functional)
+│   │   ├── CheckBox.tsx (typed functional)
+│   │   ├── Filter.tsx (typed functional)
+│   │   ├── FilteredList.tsx (typed functional)
+│   │   ├── Footer.tsx (typed functional)
+│   │   ├── Header.tsx (typed functional)
+│   │   ├── Info.tsx (typed functional)
+│   │   ├── InputBox.tsx (uses useInputBox hook)
+│   │   ├── InputWrapper.tsx (typed conditional rendering)
+│   │   ├── SearchBox.tsx (uses useInputBox hook)
+│   │   ├── TodoItem.tsx (typed functional)
+│   │   └── TodoList.tsx (typed main container)
+│   └── App.tsx (simplified composition root)
+├── services/
+│   ├── README.md
+│   ├── filter.ts (typed filter business logic)
+│   ├── mode.ts (typed mode constants/logic)
+│   └── todo.ts (typed todo CRUD operations)
+└── utils/
+    ├── README.md
+    └── common.ts (typed utilities - typo fixed)
 ```
 
-### 0.4.2 Content Generation Strategy
+### 0.3.2 Web Search Research Conducted
 
-**Information Extraction Approach**:
+**React TypeScript Best Practices (2025):**
+- Use explicit type interfaces for component props instead of `React.FC`
+- Enable strict mode in `tsconfig.json` for maximum type safety
+- Use `.tsx` extension for all components with JSX
+- Use `.ts` extension for utility files and hooks without JSX
+- Leverage TypeScript utility types: `Pick`, `Omit`, `Partial`, `Record`
 
-| Source | Extraction Method | Documentation Target |
-|--------|-------------------|---------------------|
-| JSDoc comments | Extract from `todo.js`, `common.js` | API reference sections |
-| Export statements | Analyze all module exports | Public interface lists |
-| Import statements | Trace dependencies | Related files sections |
-| Component props | Extract from destructuring patterns | Props tables |
-| Constants | Extract from constant declarations | Configuration sections |
+**SOLID Principles in React:**
+- **SRP:** Each component handles a single concern; separate UI from logic using hooks
+- **OCP:** Extend behavior through composition and hooks without modifying core components
+- **ISP:** Components receive only the props they need; avoid bloated prop interfaces
+- **DIP:** Use Context API and dependency injection patterns for loose coupling
 
-**README Template Structure for Each Module**:
+**Recompose to Hooks Migration:**
+- `withState` → `useState` hook
+- `withHandlers` → `useCallback` hook
+- `compose()` → Sequential hook calls or custom hooks
+- HOC wrapping → Direct hook usage in functional components
 
-Each module README follows a consistent structure with: Module Name heading, one-line purpose description, navigation links to parent and main README, an Overview section with 2-3 explanatory sentences, a Contents list, an API/Interface section with tables or lists, a Usage section with code examples, and a Related section with links to related modules.
+### 0.3.3 Design Pattern Applications
 
-### 0.4.3 Documentation Standards
+**Custom Hook Pattern (replacing recompose):**
+```typescript
+// Before: wrapInputBox.js with recompose
+const enhance = compose(
+  withState('value', 'setValue', ...),
+  withHandlers({ handleChange, handleKeyUp })
+);
 
-**Markdown Formatting Rules**:
-
-| Element | Standard | Example |
-|---------|----------|---------|
-| Module title | H1 with module name | `# Services` |
-| Navigation links | Blockquote at top | `> Back to [src](../README.md)` |
-| Section headings | H2 for main sections | `## Overview` |
-| Sub-sections | H3 for sub-divisions | `### todo.js` |
-| Code examples | Fenced blocks with language | Triple backticks with `javascript` |
-| Tables | Pipe-delimited | `\| Column \| Data \|` |
-| File references | Inline code | Backtick-wrapped `filename.js` |
-
-**Source Citation Pattern**:
-
-Each documented API or feature will reference its source file using the format:
-- For functions: `Source: src/services/todo.js:getAll()`
-- For constants: `Source: src/services/filter.js:FILTER_ALL`
-- For components: `Source: src/components/ui/TodoList.js`
-
-### 0.4.4 Diagram and Visual Strategy
-
-**Mermaid Diagrams to Include**:
-
-| Location | Diagram Type | Purpose |
-|----------|-------------|---------|
-| `src/README.md` | Flowchart | Show folder structure and navigation |
-| `src/components/README.md` | Flowchart | Component hierarchy and data flow |
-| `src/services/README.md` | Flowchart | Service module relationships |
-| `src/components/wrappers/README.md` | Sequence diagram | State provider data flow |
-
-**Example Diagram Structure (for src/README.md)**:
-
-```mermaid
-flowchart TB
-    subgraph src["src/"]
-        INDEX["index.js<br/>Entry Point"]
-        
-        subgraph assets["assets/"]
-            IMAGES["images/"]
-            STYLE["style/"]
-            TEXT["text/"]
-        end
-        
-        subgraph components["components/"]
-            HOC["hoc/"]
-            UI["ui/"]
-            WRAPPERS["wrappers/"]
-        end
-        
-        subgraph services["services/"]
-            TODO["todo.js"]
-            FILTER["filter.js"]
-            MODE["mode.js"]
-        end
-        
-        subgraph util["util/"]
-            COMMON["common.js"]
-        end
-    end
-    
-    INDEX --> components
-    components --> services
-    components --> util
-    components --> assets
+// After: useInputBox.ts custom hook
+const useInputBox = (initialValue, onSubmit) => {
+  const [value, setValue] = useState(initialValue);
+  const handleChange = useCallback(...);
+  const handleKeyUp = useCallback(...);
+  return { value, setValue, handleChange, handleKeyUp };
+};
 ```
 
-### 0.4.5 Cross-Reference Strategy
+**Context Pattern (replacing prop drilling):**
+```typescript
+// TodoContext.tsx - Centralized state management
+interface TodoContextValue {
+  todos: Todo[];
+  mode: Mode;
+  filter: FilterOption;
+  actions: TodoActions;
+}
+```
 
-**Navigation Link Pattern**:
+**Event Handler Pattern (fixing memory leak):**
+```typescript
+// Before: Memory leak in KeyStrokeHandler
+componentWillMount() {
+  window.addEventListener('keyup', this.handleKeyUp);
+}
+componentWillUnmount() {
+  window.removeEventListener('keyup', this.handleKeyUp); // Bug: different reference
+}
 
-Each module README will include:
+// After: Proper cleanup in useKeyboard hook
+useEffect(() => {
+  const handler = (e: KeyboardEvent) => {...};
+  window.addEventListener('keyup', handler);
+  return () => window.removeEventListener('keyup', handler); // Same reference
+}, [dependencies]);
+```
 
-- **Header navigation**: Links to parent and root README
-- **Related modules**: Links to dependent/dependency modules
-- **Footer navigation**: Optional "See also" section
+### 0.3.4 TypeScript Configuration
 
-**Example Navigation Block Format**:
+**Recommended tsconfig.json:**
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}
+```
 
-Navigation blockquote with back arrow to parent README and link to Main README at repository root.
+## 0.4 Transformation Mapping
 
-**Inter-module References**:
+### 0.4.1 File-by-File Transformation Plan
 
-| From Module | References To |
-|-------------|---------------|
-| `src/components/` | `src/services/`, `src/util/`, `src/assets/` |
-| `src/components/ui/` | `src/components/hoc/`, `src/services/` |
-| `src/components/wrappers/` | `src/services/`, `src/util/` |
-| `src/services/` | `src/util/` |
+**Transformation Modes:**
+- **UPDATE** - Update an existing file (rename to TypeScript, apply refactoring)
+- **CREATE** - Create a new file that doesn't exist in source
+- **REFERENCE** - Use as example for patterns, styles, or designs
 
+| Target File | Transformation | Source File | Key Changes |
+|-------------|----------------|-------------|-------------|
+| `src/index.tsx` | UPDATE | `src/index.js` | Convert to TypeScript, add type imports |
+| `src/types/index.ts` | CREATE | N/A | Create barrel export for all types |
+| `src/types/todo.types.ts` | CREATE | `src/services/todo.js` | Extract Todo interface from service |
+| `src/types/mode.types.ts` | CREATE | `src/services/mode.js` | Extract Mode enum from service |
+| `src/hooks/index.ts` | CREATE | N/A | Create barrel export for all hooks |
+| `src/hooks/useInputBox.ts` | CREATE | `src/components/hoc/wrapInputBox.js` | Convert HOC to custom hook with TypeScript |
+| `src/hooks/useKeyboard.ts` | CREATE | `src/components/wrappers/KeyStrokeHandler.js` | Convert class to hook, fix memory leak |
+| `src/hooks/useTodoState.ts` | CREATE | `src/components/wrappers/StateProvider.js` | Convert class state to hook |
+| `src/context/index.ts` | CREATE | N/A | Create barrel export for context |
+| `src/context/TodoContext.tsx` | CREATE | `src/components/wrappers/StateProvider.js` | Create React Context for global state |
+| `src/components/App.tsx` | UPDATE | `src/components/wrappers/App.js` | Simplify composition, use Context Provider |
+| `src/components/ui/ButtonWrapper.tsx` | UPDATE | `src/components/ui/ButtonWrapper.js` | Add TypeScript types, apply SRP |
+| `src/components/ui/CheckBox.tsx` | UPDATE | `src/components/ui/CheckBox.js` | Add TypeScript types, type event handlers |
+| `src/components/ui/Filter.tsx` | UPDATE | `src/components/ui/Filter.js` | Add TypeScript types for filter options |
+| `src/components/ui/FilteredList.tsx` | UPDATE | `src/components/ui/FilteredList.js` | Add TypeScript types, use typed Todo array |
+| `src/components/ui/Footer.tsx` | UPDATE | `src/components/ui/Footer.js` | Add TypeScript types for filter callbacks |
+| `src/components/ui/Header.tsx` | UPDATE | `src/components/ui/Header.js` | Add TypeScript types, use context |
+| `src/components/ui/Info.tsx` | UPDATE | `src/components/ui/Info.js` | Add TypeScript types for info display |
+| `src/components/ui/InputBox.tsx` | UPDATE | `src/components/ui/InputBox.js` | Remove HOC wrapper, use useInputBox hook directly |
+| `src/components/ui/InputWrapper.tsx` | UPDATE | `src/components/ui/InputWrapper.js` | Add TypeScript types for mode switching |
+| `src/components/ui/SearchBox.tsx` | UPDATE | `src/components/ui/SearchBox.js` | Remove HOC wrapper, use useInputBox hook directly |
+| `src/components/ui/TodoItem.tsx` | UPDATE | `src/components/ui/TodoItem.js` | Add TypeScript types for Todo item props |
+| `src/components/ui/TodoList.tsx` | UPDATE | `src/components/ui/TodoList.js` | Add TypeScript types, use context instead of prop drilling |
+| `src/services/filter.ts` | UPDATE | `src/services/filter.js` | Add TypeScript types, type all functions |
+| `src/services/mode.ts` | UPDATE | `src/services/mode.js` | Convert to TypeScript enum, type exports |
+| `src/services/todo.ts` | UPDATE | `src/services/todo.js` | Add TypeScript types for Todo operations |
+| `src/utils/common.ts` | UPDATE | `src/util/common.js` | Fix typo (`stringInclues` → `stringIncludes`), add types |
+| `src/assets/text/en_US.ts` | UPDATE | `src/assets/text/en_US.js` | Add TypeScript const assertions |
+| `tsconfig.json` | CREATE | N/A | TypeScript compiler configuration |
+| `package.json` | UPDATE | `package.json` | Update dependencies, add TypeScript |
 
-## 0.5 Documentation File Transformation Mapping
+### 0.4.2 Files to Delete/Remove
 
-### 0.5.1 File-by-File Documentation Plan
+| File to Delete | Reason |
+|---------------|--------|
+| `src/components/hoc/wrapInputBox.js` | Replaced by `src/hooks/useInputBox.ts` |
+| `src/components/hoc/README.md` | HOC folder no longer needed |
+| `src/components/wrappers/KeyStrokeHandler.js` | Replaced by `src/hooks/useKeyboard.ts` |
+| `src/components/wrappers/StateProvider.js` | Replaced by `src/context/TodoContext.tsx` and `src/hooks/useTodoState.ts` |
+| `src/components/wrappers/README.md` | Wrappers folder structure changed |
 
-**Documentation Transformation Map**:
+### 0.4.3 Cross-File Dependencies
 
-| Target Documentation File | Transformation | Source Code/Docs | Content/Changes |
-|---------------------------|----------------|------------------|-----------------|
-| `README.md` | UPDATE | `README.md` | Add "Module Documentation" section with links to all module READMEs |
-| `src/README.md` | CREATE | `src/index.js`, `src/*/` | Source overview, folder structure diagram, entry point explanation, navigation to all submodules |
-| `src/services/README.md` | CREATE | `src/services/*.js` | Service layer overview, API documentation for todo.js, filter.js, mode.js with constants and functions |
-| `src/components/README.md` | CREATE | `src/components/*/` | Components layer overview, organization explanation, component hierarchy diagram, links to hoc/ui/wrappers |
-| `src/components/ui/README.md` | CREATE | `src/components/ui/*.js` | UI components catalog, props tables for all 12 presentational components |
-| `src/components/wrappers/README.md` | CREATE | `src/components/wrappers/*.js` | State management documentation, App composition, StateProvider state shape, KeyStrokeHandler events |
-| `src/components/hoc/README.md` | CREATE | `src/components/hoc/wrapInputBox.js` | HOC pattern explanation, injected props, usage example with InputBox |
-| `src/util/README.md` | CREATE | `src/util/common.js` | Utility functions documentation, objectWithOnly, wrapChildrenWith, stringInclues usage |
-| `src/assets/README.md` | CREATE | `src/assets/*/` | Assets structure, images (SVG icons), styles (global CSS), text (locale constants) |
+**Import Statement Updates:**
 
-### 0.5.2 New Documentation Files Detail
+```typescript
+// FROM (old pattern):
+import { compose, withState, withHandlers } from 'recompose';
+import KeyStrokeHandler from './KeyStrokeHandler';
+import StateProvider from './StateProvider';
+import { wrapInputBox } from '../hoc/wrapInputBox';
 
-#### File: `src/README.md`
+// TO (new pattern):
+import { useInputBox } from '../hooks/useInputBox';
+import { useKeyboard } from '../hooks/useKeyboard';
+import { TodoProvider, useTodoContext } from '../context/TodoContext';
+```
 
-| Attribute | Value |
-|-----------|-------|
-| Type | Module Overview |
-| Source Code | `src/index.js`, `src/*/` |
-| Sections | Overview, Folder Structure, Entry Point, Navigation |
-| Diagrams | Mermaid flowchart showing folder relationships |
-| Key Citations | `src/index.js`, all first-level subdirectories |
+**Configuration Updates:**
+- `package.json`: Remove `recompose` dependency, add TypeScript and type definitions
+- New `tsconfig.json`: Configure TypeScript compiler options
 
-#### File: `src/services/README.md`
+### 0.4.4 One-Phase Execution
 
-| Attribute | Value |
-|-----------|-------|
-| Type | API Reference |
-| Source Code | `src/services/todo.js`, `src/services/filter.js`, `src/services/mode.js` |
-| Sections | Overview, todo.js API, filter.js API, mode.js API, Usage Examples |
-| Diagrams | Service relationship diagram |
-| Key Citations | All three service files |
+The entire refactor will be executed by Blitzy in **ONE phase**. All files are included in a single transformation batch:
 
-**Documented APIs**:
-- `todo.js`: `getAll()`, `getItemById(itemId)`, `updateStatus(items, itemId, completed)`, `addToList(list, data)`
-- `filter.js`: `FILTER_ALL`, `FILTER_ACTIVE`, `FILTER_COMPLETED`, `applyFilter(list, filter)`, `search(list, query)`, `getOptions()`
-- `mode.js`: `MODE_NONE`, `MODE_SEARCH`, `MODE_CREATE`, `getNextModeByKey(current, keyPressed)`
+**Files Count Summary:**
+- Files to UPDATE: 22
+- Files to CREATE: 10
+- Files to DELETE: 5
+- Total transformations: 37
 
-#### File: `src/components/README.md`
+## 0.5 Dependency Inventory
 
-| Attribute | Value |
-|-----------|-------|
-| Type | Module Overview |
-| Source Code | `src/components/*/` |
-| Sections | Overview, Organization, Component Hierarchy, Navigation |
-| Diagrams | Component layer hierarchy flowchart |
-| Key Citations | All three component subdirectories |
+### 0.5.1 Current Dependencies
 
-#### File: `src/components/ui/README.md`
-
-| Attribute | Value |
-|-----------|-------|
-| Type | Component Catalog |
-| Source Code | `src/components/ui/*.js` (12 files) |
-| Sections | Overview, Component List with Props, Usage Patterns |
-| Diagrams | None (table-based) |
-| Key Citations | All 12 UI component files |
-
-**Components Documented**:
-- `TodoList.js` - Main container
-- `Header.js` - App title and input wrapper
-- `Footer.js` - Filter and mode controls
-- `FilteredList.js` - Todo items container
-- `TodoItem.js` - Individual todo item
-- `CheckBox.js` - Checkbox control
-- `InputBox.js` - New todo input
-- `InputWrapper.js` - Input mode router
-- `SearchBox.js` - Search input
-- `Filter.js` - Filter buttons
-- `ButtonWrapper.js` - Mode buttons
-- `Info.js` - Keyboard shortcut hints
-
-#### File: `src/components/wrappers/README.md`
-
-| Attribute | Value |
-|-----------|-------|
-| Type | Architecture Documentation |
-| Source Code | `src/components/wrappers/App.js`, `StateProvider.js`, `KeyStrokeHandler.js` |
-| Sections | Overview, App.js, StateProvider (state shape, actions), KeyStrokeHandler |
-| Diagrams | State flow sequence diagram |
-| Key Citations | All three wrapper files |
-
-#### File: `src/components/hoc/README.md`
-
-| Attribute | Value |
-|-----------|-------|
-| Type | Pattern Documentation |
-| Source Code | `src/components/hoc/wrapInputBox.js` |
-| Sections | Overview, What is an HOC, Injected Props, Usage Example |
-| Diagrams | None |
-| Key Citations | `wrapInputBox.js`, `InputBox.js` |
-
-#### File: `src/util/README.md`
-
-| Attribute | Value |
-|-----------|-------|
-| Type | API Reference |
-| Source Code | `src/util/common.js` |
-| Sections | Overview, Functions, Usage Examples |
-| Diagrams | None |
-| Key Citations | `common.js` |
-
-**Functions Documented**:
-- `objectWithOnly(object, attrs)` - Extract and bind subset of object methods
-- `wrapChildrenWith(children, props)` - Clone React children with additional props
-- `stringInclues(str, substr)` - Substring search utility
-
-#### File: `src/assets/README.md`
-
-| Attribute | Value |
-|-----------|-------|
-| Type | Asset Documentation |
-| Source Code | `src/assets/images/*`, `src/assets/style/*`, `src/assets/text/*` |
-| Sections | Overview, Images, Styles, Text/Locale |
-| Diagrams | None |
-| Key Citations | All asset files |
-
-### 0.5.3 Documentation Files to Update
-
-## `README.md` (Root)
-
-**Changes Required**:
-- Add new section "Module Documentation" after "Steps" section
-- Include navigation links to all new module READMEs
-- Provide brief descriptions of each module's purpose
-
-**New Section Content Outline**:
-- Section heading: `## Module Documentation`
-- Introduction paragraph explaining module-level docs
-- Table or list with links to each module README
-- Brief one-line descriptions for each module
-
-### 0.5.4 Complete File List Summary
-
-| File Path | Action | Priority |
-|-----------|--------|----------|
-| `README.md` | UPDATE | High |
-| `src/README.md` | CREATE | High |
-| `src/services/README.md` | CREATE | High |
-| `src/components/README.md` | CREATE | High |
-| `src/components/ui/README.md` | CREATE | Medium |
-| `src/components/wrappers/README.md` | CREATE | High |
-| `src/components/hoc/README.md` | CREATE | Medium |
-| `src/util/README.md` | CREATE | Medium |
-| `src/assets/README.md` | CREATE | Low |
-
-**Total Documentation Files**: 9 (1 update, 8 new)
-
-
-## 0.6 Dependency Inventory
-
-### 0.6.1 Documentation Dependencies
-
-This documentation effort uses Markdown as the native documentation format, requiring no additional documentation generation tools. The project does not currently have any documentation build infrastructure.
-
-**Documentation Tool Requirements**:
-
-| Registry | Package Name | Version | Purpose | Required |
-|----------|--------------|---------|---------|----------|
-| N/A | Markdown | Native | Documentation format (GitHub-rendered) | Built-in |
-| N/A | Mermaid | GitHub-native | Diagram rendering in Markdown | Built-in |
-
-**Note**: GitHub natively renders Markdown files and Mermaid diagrams, eliminating the need for additional documentation generation tools. The documentation will be viewable directly in the GitHub repository interface.
-
-### 0.6.2 Project Runtime Dependencies
-
-For reference, the project uses the following runtime dependencies that may be documented:
-
-| Registry | Package Name | Version | Purpose |
-|----------|--------------|---------|---------|
-| npm | react | ^15.4.2 | UI component library |
-| npm | react-dom | ^15.4.2 | React DOM renderer |
-| npm | bootstrap | ^3.4.1 | CSS framework for styling |
-| npm | recompose | ^0.23.5 | Higher-order component utilities |
-| npm | keycode-js | ^0.0.4 | Keyboard event constants |
+| Registry | Package Name | Current Version | Purpose |
+|----------|-------------|-----------------|---------|
+| npm | react | ^15.4.2 | UI library (legacy) |
+| npm | react-dom | ^15.4.2 | React DOM rendering (legacy) |
+| npm | bootstrap | ^3.4.1 | CSS framework |
+| npm | recompose | ^0.23.5 | HOC utilities (deprecated) |
 | npm | immutability-helper | ^2.1.1 | Immutable state updates |
-| npm | react-scripts | 0.9.0 | Create React App build tooling (dev) |
-
-*Source: `package.json`*
-
-### 0.6.3 Documentation Reference Updates
-
-**Main README Link Updates Required**:
-
-After creating the module READMEs, the root `README.md` needs to be updated with links to the new documentation files:
-
-| Link Target | Link Text | Section |
-|-------------|-----------|---------|
-| `src/README.md` | Source Code | Module Documentation |
-| `src/services/README.md` | Services | Module Documentation |
-| `src/components/README.md` | Components | Module Documentation |
-| `src/util/README.md` | Utilities | Module Documentation |
-| `src/assets/README.md` | Assets | Module Documentation |
-
-**Internal Cross-Reference Links**:
-
-| From File | Link To | Purpose |
-|-----------|---------|---------|
-| `src/README.md` | `../README.md` | Back to main README |
-| `src/services/README.md` | `../README.md` | Back to src README |
-| `src/services/README.md` | `../../README.md` | Back to main README |
-| `src/components/README.md` | `../README.md` | Back to src README |
-| `src/components/ui/README.md` | `../README.md` | Back to components README |
-| `src/components/wrappers/README.md` | `../README.md` | Back to components README |
-| `src/components/hoc/README.md` | `../README.md` | Back to components README |
-| `src/util/README.md` | `../README.md` | Back to src README |
-| `src/assets/README.md` | `../README.md` | Back to src README |
-
-
-## 0.7 Coverage and Quality Targets
-
-### 0.7.1 Documentation Coverage Metrics
-
-**Current Coverage Analysis**:
-
-| Category | Items | Documented | Coverage |
-|----------|-------|------------|----------|
-| Modules with README | 8 folders | 0 | 0% |
-| Service APIs | 10 exports | 2 (JSDoc) | 20% |
-| UI Components | 12 files | 0 | 0% |
-| Wrapper Components | 3 files | 0 | 0% |
-| Utility Functions | 3 functions | 3 (JSDoc) | 100% |
-| Asset Folders | 3 folders | 0 | 0% |
-
-**Target Coverage**: 100% module-level README coverage
-
-**Coverage Goals by Module**:
-
-| Module | Current | Target | Gap to Close |
-|--------|---------|--------|--------------|
-| `src/` | 0% | 100% | Create README with folder overview |
-| `src/services/` | 20% | 100% | Create README documenting all 10 exports |
-| `src/components/` | 0% | 100% | Create README with organization guide |
-| `src/components/ui/` | 0% | 100% | Create README cataloging 12 components |
-| `src/components/wrappers/` | 0% | 100% | Create README for 3 wrapper components |
-| `src/components/hoc/` | 0% | 100% | Create README for HOC pattern |
-| `src/util/` | 100% (JSDoc) | 100% | Create README consolidating JSDoc |
-| `src/assets/` | 0% | 100% | Create README for asset structure |
-
-### 0.7.2 Documentation Quality Criteria
-
-**Completeness Requirements**:
-
-| Requirement | Standard |
-|-------------|----------|
-| Module overview | Every README has an Overview section explaining purpose |
-| Contents list | Every README lists its files/subdirectories |
-| Navigation | Every README has links to parent and root README |
-| API documentation | All public exports have descriptions |
-| Usage context | Readers understand when/why to use each module |
-
-**Accuracy Validation**:
-
-| Validation Check | Method |
-|-----------------|--------|
-| File references | Verify all referenced files exist |
-| Link validity | Ensure all internal links resolve correctly |
-| Export accuracy | Cross-check documented exports against source code |
-| Props accuracy | Verify component props match actual implementations |
-
-**Clarity Standards**:
-
-| Standard | Implementation |
-|----------|----------------|
-| Simple language | Avoid jargon; use plain English |
-| Neutral tone | Factual descriptions without opinions |
-| Accessible depth | Understandable by junior developers |
-| Scannable format | Use tables, lists, and clear headings |
-| Consistent terminology | Use same terms across all READMEs |
-
-**Maintainability Requirements**:
-
-| Requirement | Implementation |
-|-------------|----------------|
-| Source citations | Reference source files for traceability |
-| Consistent structure | All READMEs follow the same template |
-| Minimal duplication | Link to other READMEs instead of repeating content |
-| Future-proof | Document patterns, not just current implementation |
-
-### 0.7.3 Example and Diagram Requirements
-
-**Minimum Content Requirements per README**:
-
-| README | Examples Required | Diagrams Required |
-|--------|------------------|-------------------|
-| `src/README.md` | 0 | 1 (folder structure) |
-| `src/services/README.md` | 3 (one per service) | 1 (service relationships) |
-| `src/components/README.md` | 0 | 1 (component hierarchy) |
-| `src/components/ui/README.md` | 1-2 (usage patterns) | 0 |
-| `src/components/wrappers/README.md` | 1 (state usage) | 1 (data flow) |
-| `src/components/hoc/README.md` | 1 (HOC usage) | 0 |
-| `src/util/README.md` | 3 (one per function) | 0 |
-| `src/assets/README.md` | 0 | 0 |
-
-**Diagram Standards**:
-
-| Diagram Type | When to Use | Format |
-|--------------|-------------|--------|
-| Flowchart | Folder structures, hierarchies | Mermaid `flowchart TB` |
-| Sequence diagram | Data flow, event handling | Mermaid `sequenceDiagram` |
-| State diagram | Mode transitions | Mermaid `stateDiagram-v2` |
-
-### 0.7.4 Quality Checklist
-
-Before documentation is complete, verify:
-
-- [ ] Every module folder has a README.md
-- [ ] All README files follow the consistent template structure
-- [ ] Navigation links work correctly (parent + root)
-- [ ] All public APIs are documented with descriptions
-- [ ] Code examples use correct import paths
-- [ ] Mermaid diagrams render correctly
-- [ ] Language is clear, simple, and neutral
-- [ ] No jargon or unexplained technical terms
-- [ ] Cross-references between related modules exist
-- [ ] Root README links to all module READMEs
-
-
-## 0.8 Scope Boundaries
-
-### 0.8.1 Exhaustively In Scope
-
-**New Documentation Files**:
-
-| File Path | Type | Priority |
-|-----------|------|----------|
-| `src/README.md` | Module overview | High |
-| `src/services/README.md` | API reference | High |
-| `src/components/README.md` | Module overview | High |
-| `src/components/ui/README.md` | Component catalog | Medium |
-| `src/components/wrappers/README.md` | Architecture docs | High |
-| `src/components/hoc/README.md` | Pattern docs | Medium |
-| `src/util/README.md` | API reference | Medium |
-| `src/assets/README.md` | Asset docs | Low |
-
-**Documentation File Updates**:
-
-| File Path | Change Type | Priority |
-|-----------|-------------|----------|
-| `README.md` | Add module navigation section | High |
-
-**Documentation Content Scope**:
-
-| Content Type | In Scope |
-|--------------|----------|
-| Module overview descriptions | Yes |
-| Folder structure explanations | Yes |
-| Public API documentation | Yes |
-| Component props documentation | Yes |
-| Usage examples (brief) | Yes |
-| Navigation links | Yes |
-| Mermaid diagrams | Yes |
-| Source file citations | Yes |
-
-### 0.8.2 Explicitly Out of Scope
-
-**Source Code Modifications**:
-
-| Item | Reason |
-|------|--------|
-| Adding JSDoc comments to source files | Not requested; documentation is in README files only |
-| Modifying component implementations | Documentation task only |
-| Adding TypeScript types | Not a documentation task |
-| Fixing known bugs | Outside documentation scope |
-| Code refactoring | Outside documentation scope |
-
-**Test File Modifications**:
-
-| Item | Reason |
-|------|--------|
-| Adding test documentation | No tests exist in repository |
-| Creating test README files | No tests folder to document |
-
-**Infrastructure Changes**:
-
-| Item | Reason |
-|------|--------|
-| Adding documentation generators (MkDocs, Docusaurus) | Not requested; using native Markdown |
-| CI/CD documentation pipeline | Not requested |
-| Documentation hosting setup | Not requested |
-| Automated documentation validation | Not requested |
-
-**Content Exclusions**:
-
-| Item | Reason |
-|------|--------|
-| API documentation website | Not requested; using inline README files |
-| User-facing application documentation | Project is for developers/learners |
-| Deployment documentation | Outside scope of module READMEs |
-| Contributing guidelines | Not requested |
-| Code of conduct | Not requested |
-| Changelog maintenance | Not requested |
-
-**Explicitly Excluded Paths**:
-
-| Path | Reason |
-|------|--------|
-| `public/` | Static HTML; not a module requiring documentation |
-| `node_modules/` | Third-party dependencies |
-| `.editorconfig` | Configuration file; self-explanatory |
-| `package.json` | Standard npm manifest |
-
-### 0.8.3 Scope Summary
-
-| Category | Count | Action |
-|----------|-------|--------|
-| README files to CREATE | 8 | New module documentation |
-| README files to UPDATE | 1 | Root navigation update |
-| Source files to MODIFY | 0 | No code changes |
-| Test files to MODIFY | 0 | No test changes |
-| Config files to MODIFY | 0 | No config changes |
-
-**Total Documentation Deliverables**: 9 files (8 new + 1 updated)
-
-
-## 0.9 Execution Parameters
-
-### 0.9.1 Documentation-Specific Instructions
-
-**Documentation Format**: Markdown (`.md` files) with GitHub-native Mermaid diagram support
-
-**Documentation Build Command**: Not applicable - documentation is rendered natively by GitHub
-
-**Documentation Preview Command**: 
-- View directly on GitHub repository
-- Local preview with any Markdown viewer or VS Code preview
-
-**Diagram Generation**: Mermaid diagrams embedded directly in Markdown using fenced code blocks with `mermaid` language tag
-
-**Documentation Deployment**: Automatic via GitHub repository - no deployment steps required
-
-### 0.9.2 Writing Guidelines
-
-**Default Documentation Standards**:
-
-| Guideline | Standard |
-|-----------|----------|
-| Format | Markdown with consistent heading hierarchy |
-| Diagrams | Mermaid flowcharts and sequence diagrams |
-| Language | Clear and concise English |
-| Tone | Simple and neutral |
-| Citations | Source file references for traceability |
-
-**Heading Hierarchy**:
-
-| Level | Usage |
-|-------|-------|
-| H1 (`#`) | Module name only |
-| H2 (`##`) | Main sections (Overview, API, Usage, etc.) |
-| H3 (`###`) | Sub-sections (individual files, functions) |
-| H4 (`####`) | Detailed breakdowns (rarely needed) |
-
-**Code Block Standards**:
-
-| Content Type | Language Tag |
-|--------------|--------------|
-| JavaScript code | `javascript` |
-| JSX code | `jsx` |
-| File paths | `text` or inline code |
-| Shell commands | `bash` |
-| Diagrams | `mermaid` |
-
-### 0.9.3 File Naming Conventions
-
-| Convention | Standard |
-|------------|----------|
-| Documentation files | `README.md` (uppercase) |
-| Location | In the folder being documented |
-| One README per folder | Each module folder gets exactly one README |
-
-### 0.9.4 Validation Requirements
-
-**Manual Validation Checklist**:
-
-- Verify all internal links resolve correctly
-- Confirm Mermaid diagrams render in GitHub preview
-- Check that all referenced source files exist
-- Validate that documented exports match actual code
-- Ensure consistent terminology across all READMEs
-
-**Link Validation Pattern**:
-
-All relative links should follow the pattern:
-- Parent directory: `../README.md`
-- Sibling directory: `../sibling/README.md`
-- Root README: `../../README.md` (from nested folders)
-
-### 0.9.5 Environment Setup Reference
-
-**Project Setup Commands** (from user instructions):
-
-| Command | Purpose |
-|---------|---------|
-| `npm i --legacy-peer-deps` | Install dependencies |
-| `npm run start` | Run development server |
-| `npm run build` | Build production bundle |
-
-**Node.js Environment**: Node 20.x (current environment)
-
-**Note**: Documentation creation does not require running the application. The project environment is set up for reference when verifying source code accuracy.
-
-
-## 0.10 Special Instructions for Documentation
-
-### 0.10.1 User-Specified Directives
-
-The following special instructions were explicitly provided by the user and must be followed:
-
-| Directive | Implementation |
-|-----------|----------------|
-| "Add only module wise readme files" | Create README.md files in each module folder, not a centralized docs directory |
-| "Reference those back to main readme files" | Include navigation links in every README pointing to parent and root README |
-| "Make it easy for new developers to onboard" | Write documentation that explains "what" and "why" before "how"; use progressive disclosure |
-| "Use clear and concise English" | Avoid complex sentences; one idea per sentence; no unnecessary words |
-| "Simple and neutral language" | Avoid jargon; remain factual; do not prescribe patterns beyond what exists |
-
-### 0.10.2 Documentation Style Guidelines
-
-**Language Requirements**:
-
-| Requirement | Example |
-|-------------|---------|
-| Clear | "This module handles todo item operations" instead of "This module is responsible for the orchestration of todo item lifecycle management" |
-| Concise | "Returns a list of todo items" instead of "This function is used to retrieve and return a complete list of all todo items" |
-| Simple | "The component shows a checkbox" instead of "The component renders a controlled checkbox input element" |
-| Neutral | "The function filters items" instead of "This elegant function efficiently filters items" |
-
-**Formatting Consistency**:
-
-| Element | Format |
+| npm | keycode-js | ^0.0.4 | Keyboard key constants |
+| npm | react-scripts | 0.9.0 | Build tooling (dev dependency) |
+
+### 0.5.2 Target Dependencies
+
+| Registry | Package Name | Target Version | Purpose | Change Type |
+|----------|-------------|----------------|---------|-------------|
+| npm | react | ^18.2.0 | UI library (modern) | UPGRADE |
+| npm | react-dom | ^18.2.0 | React DOM rendering | UPGRADE |
+| npm | bootstrap | ^3.4.1 | CSS framework | KEEP |
+| npm | immutability-helper | ^3.1.1 | Immutable state updates | UPGRADE |
+| npm | keycode-js | ^3.1.0 | Keyboard key constants | UPGRADE |
+| npm | typescript | ^5.3.0 | TypeScript compiler | ADD |
+| npm | @types/react | ^18.2.0 | React type definitions | ADD |
+| npm | @types/react-dom | ^18.2.0 | ReactDOM type definitions | ADD |
+| npm | react-scripts | ^5.0.1 | Build tooling (dev) | UPGRADE |
+
+**Dependencies to Remove:**
+| Package | Reason |
 |---------|--------|
-| File names | Inline code: `` `filename.js` `` |
-| Function names | Inline code with parentheses: `` `functionName()` `` |
-| Constants | Inline code, uppercase: `` `CONSTANT_NAME` `` |
-| Props | Inline code: `` `propName` `` |
-| Paths | Inline code: `` `src/services/` `` |
+| recompose | Deprecated library, replaced by React Hooks |
 
-### 0.10.3 Navigation Pattern
+### 0.5.3 Import Refactoring
 
-**Standard Navigation Block** (include at top of every module README):
+**Files Requiring Import Updates:**
 
-Every README must begin with a navigation blockquote containing:
-- Back arrow (←) with link to parent README
-- Pipe separator
-- Link to Main README at repository root
+| File Pattern | Old Import | New Import |
+|--------------|-----------|------------|
+| `src/components/hoc/wrapInputBox.js` | `import { compose, withState, withHandlers } from 'recompose'` | Remove file entirely |
+| `src/components/ui/InputBox.js` | `import enhance from '../hoc/wrapInputBox'` | `import { useInputBox } from '../../hooks/useInputBox'` |
+| `src/components/ui/SearchBox.js` | `import enhance from '../hoc/wrapInputBox'` | `import { useInputBox } from '../../hooks/useInputBox'` |
+| `src/components/wrappers/App.js` | `import StateProvider from './StateProvider'` | `import { TodoProvider } from '../context/TodoContext'` |
+| `src/components/wrappers/App.js` | `import KeyStrokeHandler from './KeyStrokeHandler'` | Remove (use hook in TodoList) |
+| `src/components/ui/*.js` | No type imports | Add `import type { ... } from '../../types'` |
+| `src/services/*.js` | No type imports | Add interface exports and imports |
 
-**Example for `src/services/README.md`**:
-- Link to `../README.md` (src README)
-- Link to `../../README.md` (root README)
+### 0.5.4 External Reference Updates
 
-### 0.10.4 Content Priority
+**Configuration Files to Update:**
 
-**Information Hierarchy for Onboarding**:
+| File | Updates Required |
+|------|-----------------|
+| `package.json` | Update dependencies, add scripts, add TypeScript |
+| `tsconfig.json` | Create new TypeScript configuration |
+| `public/index.html` | No changes required |
+| `.editorconfig` | No changes required |
 
-| Priority | Content Type | Purpose |
-|----------|--------------|---------|
-| 1 | Overview | Immediate understanding of module purpose |
-| 2 | Contents | Quick scan of what's inside |
-| 3 | Key concepts | Essential knowledge for working with module |
-| 4 | API/Interface | Reference for using the module |
-| 5 | Examples | Practical usage patterns |
-| 6 | Related links | Further exploration |
+### 0.5.5 Updated package.json Structure
 
-### 0.10.5 Onboarding Focus
+```json
+{
+  "name": "react-todo-app",
+  "version": "0.2.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "immutability-helper": "^3.1.1",
+    "keycode-js": "^3.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "typescript": "^5.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "type-check": "tsc --noEmit"
+  }
+}
+```
 
-**New Developer Journey**:
+## 0.6 Scope Boundaries
 
-Documentation should support this reading path:
+### 0.6.1 Exhaustively In Scope
 
-1. **Start at root README** → Learn what the project is
-2. **Navigate to `src/README.md`** → Understand source organization
-3. **Choose a module** → Based on interest or task
-4. **Read module README** → Understand module purpose and contents
-5. **Explore specific files** → With context from README
+**Source Transformations:**
+- `src/**/*.js` - All JavaScript source files (21 files)
+- `src/index.js` - Application entry point
+- `src/components/**/*.js` - All React components (15 files)
+- `src/services/**/*.js` - All service modules (3 files)
+- `src/util/**/*.js` - All utility modules (1 file)
+- `src/assets/text/**/*.js` - Localization files (1 file)
 
-**Questions Each README Should Answer**:
+**New File Creation:**
+- `src/types/**/*.ts` - Type definition files (3 files)
+- `src/hooks/**/*.ts` - Custom hook files (4 files)
+- `src/context/**/*.tsx` - React Context files (2 files)
+- `tsconfig.json` - TypeScript configuration (1 file)
 
-| Question | Section |
-|----------|---------|
-| What is this module for? | Overview |
-| What files are in here? | Contents |
-| What does each file do? | Contents or API section |
-| How do I use this module? | Usage or API section |
-| What other modules relate to this? | Related section |
-| How do I get back to see the big picture? | Navigation links |
+**Configuration Updates:**
+- `package.json` - Dependency updates and script additions
 
-### 0.10.6 Constraints Summary
+**Documentation Updates:**
+- `src/README.md` - Update to reflect new structure
+- `src/components/README.md` - Update component documentation
+- `src/services/README.md` - Update service documentation
+- `src/components/ui/README.md` - Update UI component documentation
 
-| Constraint | Reason |
-|------------|--------|
-| No source code modifications | Documentation-only task |
-| README files only | User specified "readme files" |
-| Module-wise organization | User specified "module wise" |
-| Cross-referencing required | User specified "reference back to main" |
-| Onboarding focus | User specified "easy for new developers" |
-| Language simplicity | User specified "clear and concise", "simple and neutral" |
+**Bug Fixes:**
+- `src/util/common.js` → `src/utils/common.ts` - Fix `stringInclues` typo
+- `src/components/wrappers/KeyStrokeHandler.js` → `src/hooks/useKeyboard.ts` - Fix memory leak
 
+**Import Corrections:**
+- Every file containing `recompose` imports
+- Every file importing from `./hoc/wrapInputBox`
+- Every file importing from `./wrappers/StateProvider`
+- Every file importing from `./wrappers/KeyStrokeHandler`
+
+### 0.6.2 Explicitly Out of Scope
+
+| Item | Reason |
+|------|--------|
+| `src/assets/style/index.css` | CSS styling preserved as-is |
+| `src/assets/images/**/*` | Static assets not affected |
+| `public/**/*` | Public assets unchanged |
+| `node_modules/**/*` | External dependencies managed by npm |
+| `build/**/*` | Generated output, not source |
+| `.editorconfig` | Editor configuration unchanged |
+| `README.md` (root) | Project-level documentation unchanged |
+| Backend/API changes | No backend exists in this project |
+| New features | Focus is on refactoring, not feature additions |
+| UI/UX redesign | Visual design preserved |
+| Bootstrap upgrade | Staying on Bootstrap 3.4.1 for compatibility |
+| Test file creation | Tests can be added separately after refactor |
+
+### 0.6.3 Scope Validation Checklist
+
+| Requirement | In Scope | Verification |
+|-------------|----------|--------------|
+| DRY principle applied | ✅ | Eliminate duplicate code in InputBox/SearchBox via shared hook |
+| SOLID principles applied | ✅ | SRP in component separation, DIP via Context |
+| TypeScript migration | ✅ | All 22 JS files converted to TS/TSX |
+| React best practices | ✅ | Functional components, hooks, proper effect cleanup |
+| Bug fixes | ✅ | Memory leak and typo corrected |
+| recompose removal | ✅ | Replaced with native hooks |
+| Functionality preserved | ✅ | Same behavior maintained |
+| Styling preserved | ✅ | CSS files unchanged |
+
+### 0.6.4 Wildcard Patterns Summary
+
+**Files to Transform (Trailing Patterns):**
+```
+src/**/*.js                    → src/**/*.tsx or src/**/*.ts
+src/components/**/*.js         → src/components/**/*.tsx
+src/services/**/*.js           → src/services/**/*.ts
+src/util/**/*.js               → src/utils/**/*.ts
+src/assets/text/**/*.js        → src/assets/text/**/*.ts
+```
+
+**Files to Create:**
+```
+src/types/*.ts                 (new type definitions)
+src/hooks/*.ts                 (new custom hooks)
+src/context/*.tsx              (new React Context)
+tsconfig.json                  (TypeScript config)
+```
+
+**Files to Delete:**
+```
+src/components/hoc/**/*        (HOC pattern replaced by hooks)
+src/components/wrappers/KeyStrokeHandler.js   (replaced by hook)
+src/components/wrappers/StateProvider.js      (replaced by context)
+```
+
+## 0.7 Refactoring Rules
+
+### 0.7.1 DRY Principle Application
+
+**Identified Duplication to Eliminate:**
+
+| Duplication Pattern | Current Location | Refactored Solution |
+|--------------------|------------------|---------------------|
+| Input handling logic | `InputBox.js`, `SearchBox.js` (both use same HOC) | Single `useInputBox` hook shared by both |
+| State management boilerplate | `StateProvider.js` class methods | `useTodoState` hook with cleaner API |
+| Child wrapping pattern | `common.js` `wrapChildrenWith` utility | React Context `Provider` pattern |
+| Event listener setup/cleanup | `KeyStrokeHandler.js` lifecycle | `useKeyboard` hook with proper cleanup |
+
+**DRY Implementation Strategy:**
+```typescript
+// Instead of duplicating enhance() pattern in multiple components:
+// InputBox.js: export default enhance(InputBox)
+// SearchBox.js: export default enhance(SearchBox)
+
+// Use shared hook in each component:
+const InputBox = ({ addNew }) => {
+  const { value, handleChange, handleKeyUp } = useInputBox('', addNew);
+  return <input value={value} onChange={handleChange} onKeyUp={handleKeyUp} />;
+};
+```
+
+### 0.7.2 SOLID Principles Application
+
+**Single Responsibility Principle (SRP):**
+- Each component handles ONE concern
+- `TodoItem` renders a single todo (not list management)
+- `FilteredList` applies filters (not filtering logic)
+- `useInputBox` manages input state (not todo creation)
+
+**Open/Closed Principle (OCP):**
+- Components extensible via props without modification
+- `Filter` component accepts any filter options via props
+- `ButtonWrapper` accepts any click handler
+
+**Liskov Substitution Principle (LSP):**
+- Type interfaces ensure component substitutability
+- All input components implement same `InputProps` interface
+- Filter components can be swapped if implementing `FilterProps`
+
+**Interface Segregation Principle (ISP):**
+- Components receive only props they use
+- `TodoItem` receives single todo, not entire list
+- `CheckBox` receives checked state, not filter logic
+
+**Dependency Inversion Principle (DIP):**
+- Use Context API instead of direct prop drilling
+- Components depend on `useTodoContext` abstraction
+- Services are pure functions without component dependencies
+
+### 0.7.3 React Best Practices
+
+**Functional Component Pattern:**
+```typescript
+// Props interface first
+interface TodoItemProps {
+  todo: Todo;
+  onStatusChange: (id: string, completed: boolean) => void;
+}
+
+// Functional component with explicit typing
+const TodoItem = ({ todo, onStatusChange }: TodoItemProps) => {
+  // Component logic
+};
+```
+
+**Hook Rules:**
+- Call hooks at top level only
+- Call hooks from React functions only
+- Use custom hooks for reusable stateful logic
+- Use `useCallback` for event handlers passed to children
+- Use `useMemo` for expensive computations
+
+**Effect Cleanup Pattern:**
+```typescript
+useEffect(() => {
+  const handler = (e: KeyboardEvent) => { /* ... */ };
+  window.addEventListener('keyup', handler);
+  
+  // Cleanup function prevents memory leaks
+  return () => window.removeEventListener('keyup', handler);
+}, [dependencies]);
+```
+
+### 0.7.4 TypeScript Best Practices
+
+**Type Definition Rules:**
+- Define explicit interfaces for all component props
+- Use `type` for unions and intersections
+- Use `interface` for object shapes that may be extended
+- Avoid `any` type - use `unknown` if type is uncertain
+- Enable `strict` mode in tsconfig.json
+
+**Naming Conventions:**
+- Props interfaces: `ComponentNameProps` (e.g., `TodoItemProps`)
+- Context types: `ContextNameValue` (e.g., `TodoContextValue`)
+- Hook return types: Inferred or explicit tuple/object types
+
+**File Extension Rules:**
+- `.tsx` for files containing JSX
+- `.ts` for files without JSX (services, utils, types, hooks without JSX)
+
+### 0.7.5 Code Quality Rules
+
+| Rule | Implementation |
+|------|----------------|
+| No `any` types | Use proper typing or `unknown` |
+| No unused variables | Remove or prefix with `_` |
+| No console.log in production | Remove debug statements |
+| Consistent naming | camelCase for functions/variables, PascalCase for components/types |
+| Explicit return types | Optional but recommended for public APIs |
+| Readonly where applicable | Use `readonly` for immutable properties |
+| Const assertions | Use `as const` for literal types |
+
+### 0.7.6 Preserved Functionality Requirements
+
+**Must Maintain:**
+- All keyboard shortcuts (Enter to add, search mode toggle)
+- Filter functionality (All, Active, Completed)
+- Todo status toggle via checkbox
+- Search filtering behavior
+- Mode switching (None, Search, Create)
+- Localization text from `en_US.js`
+
+**Behavioral Contracts:**
+- Adding empty todos should be prevented
+- Search should filter case-insensitively
+- Completed todos should display with strikethrough
+- Filter counts should update in real-time
+
+## 0.8 References
+
+### 0.8.1 Files and Folders Analyzed
+
+**Root Level Files:**
+| File | Purpose |
+|------|---------|
+| `package.json` | Dependency manifest - identified React 15.4.2, recompose 0.23.5 |
+| `README.md` | Project documentation |
+| `.editorconfig` | Editor configuration |
+
+**Source Directory Structure:**
+| Path | Files Analyzed | Key Findings |
+|------|----------------|--------------|
+| `src/` | `index.js`, `README.md` | Entry point rendering App component |
+| `src/components/wrappers/` | `App.js`, `KeyStrokeHandler.js`, `StateProvider.js` | Class components with lifecycle methods, memory leak bug |
+| `src/components/hoc/` | `wrapInputBox.js`, `README.md` | Recompose HOC pattern requiring migration |
+| `src/components/ui/` | 12 component files | Stateless functional components, some enhanced with HOC |
+| `src/services/` | `filter.js`, `mode.js`, `todo.js` | Business logic modules |
+| `src/util/` | `common.js` | Utility functions with typo bug |
+| `src/assets/text/` | `en_US.js` | Localization constants |
+| `src/assets/style/` | `index.css` | Bootstrap overrides (out of scope) |
+
+### 0.8.2 Technical Specifications Consulted
+
+| Section | Information Extracted |
+|---------|----------------------|
+| 5.2 Component Details | Component architecture and relationships |
+| 6.6 Testing Strategy | Test patterns for services |
+| 3.3 Frameworks & Libraries | Current dependency versions |
+
+### 0.8.3 Web Search Research Conducted
+
+**React TypeScript Best Practices:**
+- Source: Medium, Dev.to, LogRocket (November 2025 - January 2026)
+- Key insights: Use explicit prop interfaces, enable strict mode, prefer `.tsx` for components
+- TypeScript has become "the gold standard for React development" with over 70% adoption
+
+**SOLID Principles in React:**
+- Source: GitHub repositories, Medium articles (2024-2025)
+- Key insights: SRP applies to components handling single concerns, ISP means components shouldn't depend on props they don't use
+- "Applying SOLID principles in React applications improves code quality, scalability, and maintainability"
+
+**Recompose to Hooks Migration:**
+- Source: Medium, GitHub guides (2019-2025)
+- Key insight: Recompose author Andrew Clark stated "Hooks solves all the problems I attempted to address with Recompose"
+- Migration pattern: `withState` → `useState`, `withHandlers` → `useCallback`, `compose` → custom hooks
+
+### 0.8.4 User-Provided Attachments
+
+No attachments were provided for this project.
+
+### 0.8.5 User-Provided URLs
+
+No Figma URLs or external design references were provided.
+
+### 0.8.6 Setup Instructions Reference
+
+User-provided setup commands executed during environment preparation:
+```bash
+# Install dependencies with legacy peer resolution
+npm i --legacy-peer-deps
+
+#### Start development server
+npm run start
+
+#### Build for production
+npm run build
+```
+
+### 0.8.7 Search and Discovery Log
+
+| Search # | Tool | Target | Purpose | Result |
+|----------|------|--------|---------|--------|
+| 1 | bash | `find / -name ".blitzyignore"` | Check for ignored patterns | None found |
+| 2 | get_source_folder_contents | `""` (root) | Discover project structure | 6 items found |
+| 3 | get_source_folder_contents | `src` | Explore source directory | 6 items found |
+| 4 | get_source_folder_contents | `src/components` | Explore components | 4 subdirectories |
+| 5 | get_source_folder_contents | `src/components/ui` | Explore UI components | 12 components |
+| 6 | get_source_folder_contents | `src/components/wrappers` | Explore wrappers | 4 items |
+| 7 | get_source_folder_contents | `src/services` | Explore services | 4 items |
+| 8 | get_source_folder_contents | `src/util` | Explore utilities | 2 items |
+| 9 | get_source_folder_contents | `src/assets` | Explore assets | 4 items |
+| 10 | read_file | `package.json` | Get dependencies | Versions confirmed |
+| 11-27 | read_file | Various `.js` files | Analyze source code | Bugs and patterns identified |
+| 28 | bash | `npm i --legacy-peer-deps` | Install dependencies | Success |
+| 29 | bash | `npm run build` | Verify build | Build successful |
+| 30 | web_search | React TypeScript best practices | Research modern patterns | Multiple sources |
+| 31 | web_search | React SOLID DRY principles | Research design principles | Multiple sources |
+| 32 | web_search | Recompose to hooks migration | Research migration strategy | Multiple sources |
+
+**Total Searches Performed:** 32
+**Files Retrieved:** 22
+**Folders Explored:** 9
 

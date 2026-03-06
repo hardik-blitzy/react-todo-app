@@ -4,7 +4,7 @@
 
 ## Overview
 
-This folder contains the React UI layer for the Todo application. The components are organized into three subfolders that separate concerns: `hoc/` for higher-order components that enhance other components with additional behavior, `ui/` for presentational components that form the visual interface, and `wrappers/` for components that handle application state and global event listening.
+This folder contains the React UI layer for the Todo application. The components are organized with the `App.tsx` root component at the top level and the `ui/` subfolder containing presentational components that form the visual interface. State management is handled through the `context/` folder via `TodoContext`, and reusable stateful logic is encapsulated in custom hooks from the `hooks/` folder (including `useKeyboard` for global keyboard handling and `useInputBox` for input components).
 
 ## Component Hierarchy
 
@@ -12,10 +12,9 @@ The following diagram shows how components are composed within the application:
 
 ```mermaid
 flowchart TB
-    subgraph wrappers["wrappers/"]
-        APP["App"]
-        SP["StateProvider"]
-        KSH["KeyStrokeHandler"]
+    subgraph root["Root"]
+        APP["App.tsx"]
+        TP["TodoProvider (from context/)"]
     end
     
     subgraph ui["ui/"]
@@ -24,8 +23,8 @@ flowchart TB
         subgraph header_group["Header Group"]
             HDR["Header"]
             IW["InputWrapper"]
-            IB["InputBox"]
-            SB["SearchBox"]
+            IB["InputBox<br/>(uses useInputBox hook)"]
+            SB["SearchBox<br/>(uses useInputBox hook)"]
         end
         
         subgraph list_group["List Group"]
@@ -43,13 +42,15 @@ flowchart TB
         INFO["Info"]
     end
     
-    subgraph hoc["hoc/"]
-        HOC["wrapInputBox"]
+    subgraph hooks["hooks/"]
+        UK["useKeyboard"]
+        UIB["useInputBox"]
     end
     
-    APP --> SP
-    SP --> KSH
-    KSH --> TL
+    APP --> TP
+    TP --> TL
+    
+    TL -.->|uses| UK
     
     TL --> HDR
     TL --> FL
@@ -60,88 +61,90 @@ flowchart TB
     IW --> IB
     IW --> SB
     
+    IB -.->|uses| UIB
+    SB -.->|uses| UIB
+    
     FL --> TI
     TI --> CB
     
     FTR --> BW
     FTR --> FLT
-    
-    HOC -.->|enhances| IB
 ```
 
 ## Organization
 
-The components folder contains three subdirectories, each serving a distinct purpose:
+The components folder contains the root App component and a ui/ subdirectory for presentational components:
 
-### hoc/
+### App.tsx
 
-Higher-Order Components (HOCs) are functions that take a component and return an enhanced version of that component with additional props or behavior.
+The root component that serves as the application entry point. It wraps the entire application with the `TodoProvider` context provider, enabling state management throughout the component tree.
 
 | File | Purpose |
 |------|---------|
-| `wrapInputBox.js` | Enhances input components with controlled value state and keyboard event handlers |
+| `App.tsx` | Application root that provides TodoContext and renders the main TodoList component |
+
+**Key Features:**
+- Functional component using React hooks
+- Integrates `TodoProvider` from `context/TodoContext` for global state management
+- Uses `useKeyboard` hook for handling global keyboard shortcuts (mode switching)
+- Simplified composition without class-based wrapper components
 
 ### ui/
 
-Presentational components form the visual interface of the application. These components receive data and callbacks through props and render the UI.
+Presentational components form the visual interface of the application. These components receive data and callbacks through props (or via `useTodoContext` hook) and render the UI. All components are TypeScript functional components using the `.tsx` extension.
 
 | File | Purpose |
 |------|---------|
-| `TodoList.js` | Main container that composes all UI sections |
-| `Header.js` | Displays the application title and input area |
-| `Footer.js` | Contains mode buttons, item count, and filter controls |
-| `FilteredList.js` | Renders the list of todo items or an empty state message |
-| `TodoItem.js` | Displays a single todo item with completion checkbox |
-| `CheckBox.js` | Controlled checkbox input component |
-| `InputBox.js` | Text input for adding new todo items |
-| `InputWrapper.js` | Routes between InputBox and SearchBox based on mode |
-| `SearchBox.js` | Text input for searching todo items |
-| `Filter.js` | Buttons to filter by All, Active, or Completed status |
-| `ButtonWrapper.js` | Buttons to switch between Create and Search modes |
-| `Info.js` | Displays keyboard shortcut hints |
-
-### wrappers/
-
-Wrapper components handle cross-cutting concerns like state management and global event handling. They wrap other components to provide data and behavior.
-
-| File | Purpose |
-|------|---------|
-| `App.js` | Application root that composes the provider hierarchy |
-| `StateProvider.js` | Manages application state and provides action methods to children |
-| `KeyStrokeHandler.js` | Listens for global keyboard events and triggers mode changes |
+| `TodoList.tsx` | Main container that composes all UI sections and integrates useKeyboard hook |
+| `Header.tsx` | Displays the application title and input area |
+| `Footer.tsx` | Contains mode buttons, item count, and filter controls |
+| `FilteredList.tsx` | Renders the list of todo items or an empty state message |
+| `TodoItem.tsx` | Displays a single todo item with completion checkbox |
+| `CheckBox.tsx` | Controlled checkbox input component |
+| `InputBox.tsx` | Text input for adding new todo items (uses useInputBox hook) |
+| `InputWrapper.tsx` | Routes between InputBox and SearchBox based on mode |
+| `SearchBox.tsx` | Text input for searching todo items (uses useInputBox hook) |
+| `Filter.tsx` | Buttons to filter by All, Active, or Completed status |
+| `ButtonWrapper.tsx` | Buttons to switch between Create and Search modes |
+| `Info.tsx` | Displays keyboard shortcut hints |
 
 ## Data Flow
 
-Data flows through the component hierarchy in a unidirectional pattern:
+Data flows through the component hierarchy using React Context in a unidirectional pattern:
 
-1. **StateProvider** maintains the application state:
-   - `list` — Array of todo items
+1. **TodoContext** (via `TodoProvider`) maintains the application state:
+   - `todos` — Array of todo items
    - `filter` — Current filter selection (All, Active, Completed)
    - `mode` — Current input mode (Create, Search, None)
    - `query` — Current search query string
 
-2. **StateProvider** passes state as `data` and action methods as `actions` to its children through props.
+2. **TodoProvider** makes state and action methods available to all descendant components via the `useTodoContext` hook, eliminating prop drilling.
 
-3. **KeyStrokeHandler** intercepts keyboard events and calls `changeMode()` when mode-switching keys are pressed.
+3. **useKeyboard hook** (used in TodoList) intercepts keyboard events and calls `changeMode()` when mode-switching keys are pressed. This hook properly manages event listener cleanup to prevent memory leaks.
 
-4. **TodoList** receives `data` and `actions`, then distributes relevant portions to child components:
+4. **TodoList** accesses state via `useTodoContext` and distributes relevant portions to child components:
    - Header receives `addNew`, `mode`, `query`, and `setSearchQuery`
    - FilteredList receives the filtered `items` array and `changeStatus`
    - Footer receives `activeItemCount`, `filter`, `changeFilter`, `mode`, and `changeMode`
    - Info receives `mode`
 
-5. **UI components** render based on the props they receive and call action methods when users interact with them.
+5. **useInputBox hook** provides shared input handling logic to InputBox and SearchBox components, including controlled value state and keyboard event handlers. This eliminates code duplication between these components.
+
+6. **UI components** render based on the props/context they receive and call action methods when users interact with them.
 
 ## Related
 
 ### Subfolders
 
-- [hoc/](hoc/README.md) — Higher-order component documentation
 - [ui/](ui/README.md) — UI components catalog
-- [wrappers/](wrappers/README.md) — State and event wrapper documentation
+
+### Supporting Modules
+
+- [hooks/](../hooks/README.md) — Custom hooks including useInputBox, useKeyboard, and useTodoState
+- [context/](../context/README.md) — React Context providers including TodoContext
 
 ### Dependencies
 
 - [services/](../services/README.md) — Business logic for todo operations, filtering, and mode management
-- [util/](../util/README.md) — Helper functions used by wrapper components
+- [utils/](../utils/README.md) — Helper functions used by components and hooks
 - [assets/](../assets/README.md) — Static resources including locale strings used by UI components
