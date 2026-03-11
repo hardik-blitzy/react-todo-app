@@ -65,6 +65,6 @@ For easier onboarding, module-level documentation is available throughout the co
 | [Locale Text](src/assets/text/README.md) | `src/assets/text/` | Localization constants and user-facing string catalog |
 | [Images](src/assets/images/README.md) | `src/assets/images/` | SVG icon assets for UI controls |
 | [Styles](src/assets/style/README.md) | `src/assets/style/` | Global CSS stylesheet architecture and theming |
-| [Tests](src/__tests__/) | `src/__tests__/` | Unit test suite for services and utilities |
+| [Tests](src/__tests__/README.md) | `src/__tests__/` | Unit test suite for services and utilities |
 
 Start with the [Source Code](src/README.md) README for a guided tour of the codebase.

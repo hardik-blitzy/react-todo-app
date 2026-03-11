@@ -35,7 +35,7 @@ The icons are consumed via the CSS `background-image` property in `src/assets/st
 
 ### Icon Background Selectors
 
-The following selectors assign each SVG as the background image for its corresponding button (lines 111–117 of `index.css`):
+The following selectors assign each SVG as the background image for its corresponding button (the `.buttons .add` and `.buttons .search` selectors in `index.css`):
 
 ```css
 .buttons .add {
@@ -49,7 +49,7 @@ The following selectors assign each SVG as the background image for its correspo
 
 ### Base Button Styles
 
-The `.buttons .button` selector defines the shared visual properties for all icon buttons (lines 96–104 of `index.css`):
+The `.buttons .button` selector defines the shared visual properties for all icon buttons (in `index.css`):
 
 ```css
 .buttons .button {

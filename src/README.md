@@ -57,6 +57,8 @@ flowchart TB
     tests --> util
 ```
 
+> **Note:** The `__tests__/` section in the diagram above shows the target test architecture. Currently, `mode.test.js` is the only implemented test file; the remaining test files (`todo.test.js`, `filter.test.js`, `common.test.js`) are planned for future implementation.
+
 ## Entry Point
 
 The file `index.js` is the application entry point. It performs the following tasks:
@@ -91,7 +93,7 @@ The `root` DOM element is defined in `public/index.html`.
 | [components/](components/README.md) | React UI layer organized into HOCs, presentational components, and state wrappers |
 | [services/](services/README.md) | Business logic modules for todo operations, list filtering, and UI mode management |
 | [util/](util/README.md) | Shared helper functions for object manipulation, React children handling, and string operations |
-| [`__tests__/`](__tests__/) | Unit test suite for services and utility modules |
+| [`__tests__/`](__tests__/README.md) | Unit test suite for services and utility modules |
 
 ## Related
 
