@@ -57,7 +57,7 @@ flowchart TB
     tests --> util
 ```
 
-> **Note:** The `__tests__/` section in the diagram above shows the target test architecture. Currently, `mode.test.js` is the only implemented test file; the remaining test files (`todo.test.js`, `filter.test.js`, `common.test.js`) are planned for future implementation.
+> **Note:** The `__tests__/` directory contains unit tests for the service and utility layers. All four test files (`mode.test.js`, `todo.test.js`, `filter.test.js`, `common.test.js`) are implemented and passing.
 
 ## Entry Point
 

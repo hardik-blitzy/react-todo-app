@@ -221,7 +221,7 @@ Wrapper components import shared helper functions from `src/util/common.js` for 
 
 | Utility | Consuming Components | Purpose |
 |---------|---------------------|---------|
-| `objectWithOnly()` | StateProvider, KeyStrokeHandler | Extracts bound methods from a component instance by name, producing an object of callable action references |
+| `objectWithOnly()` | StateProvider | Extracts bound methods from a component instance by name, producing an object of callable action references |
 | `wrapChildrenWith()` | StateProvider, KeyStrokeHandler | Clones React children via `React.Children.map` + `React.cloneElement`, injecting additional props into each child |
 
 ### Asset Layer (`src/assets/`)
