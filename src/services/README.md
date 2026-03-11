@@ -23,26 +23,38 @@ flowchart TB
         FILTER["filter.js"]
         MODE["mode.js"]
     end
-    
+
     subgraph deps["External Dependencies"]
         IMM["immutability-helper"]
         KEY["keycode-js"]
     end
-    
+
     subgraph util["util/"]
         COMMON["common.js"]
     end
-    
-    subgraph consumers["Consumers"]
-        COMP["components/"]
+
+    subgraph consumers["Component Consumers"]
+        SP["StateProvider.js"]
+        KSH["KeyStrokeHandler.js"]
+        TL["TodoList.js"]
+        IW["InputWrapper.js"]
+        BW["ButtonWrapper.js"]
+        FLT["Filter.js"]
+        INF["Info.js"]
     end
-    
+
     TODO --> IMM
     FILTER --> COMMON
     MODE --> KEY
-    COMP --> TODO
-    COMP --> FILTER
-    COMP --> MODE
+    SP --> TODO
+    SP --> FILTER
+    SP --> MODE
+    KSH --> MODE
+    TL --> FILTER
+    IW --> MODE
+    BW --> MODE
+    FLT --> FILTER
+    INF --> MODE
 ```
 
 ## Contents
@@ -63,10 +75,19 @@ Provides todo item CRUD operations with immutable data handling. Uses `immutabil
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `getAll()` | none | `Array` | Returns array of sample todo items `{id, text, completed}` |
-| `getItemById(itemId)` | `itemId: number` | `Object` | Finds and returns a todo item by its id |
-| `updateStatus(items, itemId, completed)` | `items: Array`, `itemId: number`, `completed: boolean` | `Array` | Returns new list with updated item status (immutable) |
-| `addToList(list, data)` | `list: Array`, `data: Object` | `Array` | Returns new list with added item, auto-generates id |
+| `getAll()` | none | `Array` | Returns a fresh array of 3 seeded todo items with ids 1–3, each having `{id, text, completed}` shape. All items start with `completed: false` |
+| `getItemById(itemId)` | `itemId: number` | `Object\|undefined` | Regenerates the canonical list via `getAll()` and returns the matching item using `Array.prototype.find`. Returns `undefined` if no match is found |
+| `updateStatus(items, itemId, completed)` | `items: Array`, `itemId: number`, `completed: boolean` | `Array` | Uses `findIndex` to locate the item, then applies `immutability-helper`'s `update()` with `{$set: completed}` to produce a new array with the toggled status. Immutable — the original array is never modified |
+| `addToList(list, data)` | `list: Array`, `data: Object` | `Array` | Auto-generates a unique `id` via the internal `getNextId()` helper, merges it with `data` using `Object.assign()`, and returns `list.concat([item])` for immutable list addition |
+
+### Internal Helpers
+
+These are module-private functions and variables not exported from `todo.js`:
+
+| Name | Type | Description |
+|------|------|-------------|
+| `todoCounter` | `number` | Module-level counter initialized to `1`. Used for deterministic ID generation. Increments with each call to `getNextId()` |
+| `getNextId()` | `function` | Returns `getAll().length + todoCounter++`, combining the seeded list length (`3`) with the incrementing counter to produce unique IDs starting from `4` |
 
 ### Data Structure
 
@@ -74,9 +95,9 @@ Each todo item has the following shape:
 
 ```javascript
 {
-    id: number,        // Unique identifier
+    id: number,        // Unique identifier (1-3 for seeded, 4+ for added)
     text: string,      // Todo item text
-    completed: boolean // Completion status
+    completed: boolean // Completion status (false by default)
 }
 ```
 
@@ -111,17 +132,19 @@ Provides list filtering and search functionality. Uses `stringInclues` from `uti
 
 | Constant | Value | Description |
 |----------|-------|-------------|
-| `FILTER_ALL` | `'all'` | Show all items regardless of status |
-| `FILTER_ACTIVE` | `'active'` | Show only incomplete items |
-| `FILTER_COMPLETED` | `'completed'` | Show only completed items |
+| `FILTER_ALL` | `'all'` | Default filter showing all items regardless of completion status. Used as the `default` case in `applyFilter` |
+| `FILTER_ACTIVE` | `'active'` | Filters items where `completed !== true` (pending items only) |
+| `FILTER_COMPLETED` | `'completed'` | Filters items where `completed === true` (finished items only) |
 
 ### Functions
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `applyFilter(list, filter)` | `list: Array`, `filter: string` | `Array` | Filters list by completion status |
-| `search(list, query)` | `list: Array`, `query: string` | `Array` | Filters list by text search (case-insensitive) |
-| `getOptions()` | none | `Object` | Returns filter options `{all: 'All', active: 'Active', completed: 'Completed'}` |
+| `applyFilter(list, filter)` | `list: Array`, `filter: string` | `Array` | Uses a `switch` statement: returns `list.filter(item => item.completed === true)` for `FILTER_COMPLETED`, `list.filter(item => item.completed !== true)` for `FILTER_ACTIVE`, and returns the full list as default for `FILTER_ALL` |
+| `search(list, query)` | `list: Array`, `query: string` | `Array` | Trims and lowercases the query, then filters items using `stringInclues(text.toLowerCase(), q)` imported from `../util/common`. The helper name is intentionally misspelled (`stringInclues` without the "d") for backward compatibility |
+| `getOptions()` | none | `Object` | Returns an object using computed property names: `{ [FILTER_ALL]: 'All', [FILTER_ACTIVE]: 'Active', [FILTER_COMPLETED]: 'Completed' }`. Used by the `Filter` component to render filter anchors |
+
+> **Dependency Note:** `filter.js` imports `stringInclues` from `../util/common` — the sole internal dependency for this service module. All other services have zero internal imports.
 
 ### Usage Example
 
@@ -210,6 +233,12 @@ currentMode = getNextModeByKey(currentMode, KEY_N);
 
 ## Related
 
-- [components/wrappers/](../components/wrappers/README.md) — Components that consume these services
-- [util/](../util/README.md) — Utility module used by `filter.js`
+- [components/wrappers/StateProvider.js](../components/wrappers/StateProvider.js) — Consumes `todo.js`, `filter.js`, and `mode.js` for centralized state management
+- [components/wrappers/KeyStrokeHandler.js](../components/wrappers/KeyStrokeHandler.js) — Consumes `mode.js` for keyboard-driven mode transitions
+- [components/ui/TodoList.js](../components/ui/TodoList.js) — Consumes `filter.js` for the two-stage data pipeline (`applyFilter` → `search`)
+- [components/ui/InputWrapper.js](../components/ui/InputWrapper.js) — Consumes `mode.js` constants for conditional input rendering
+- [components/ui/ButtonWrapper.js](../components/ui/ButtonWrapper.js) — Consumes `mode.js` constants for mode toggle buttons
+- [components/ui/Filter.js](../components/ui/Filter.js) — Consumes `filter.js` for filter options and constants
+- [components/ui/Info.js](../components/ui/Info.js) — Consumes `mode.js` constants for contextual keyboard shortcut text
+- [util/](../util/README.md) — Utility module providing `stringInclues` to `filter.js`
 - [src/](../README.md) — Source code overview
