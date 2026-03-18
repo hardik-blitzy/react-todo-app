@@ -5,7 +5,7 @@ This sample app was a part of react workshop.
 
 You can check the slides [here](https://speakerdeck.com/kabirbaidhya/frontend-development-with-react).
 
-Check the demo hosted on heroku https://simplest-react-todo-app.herokuapp.com/.
+~~Check the demo hosted on heroku https://simplest-react-todo-app.herokuapp.com/.~~ *(Demo no longer available — Heroku free tier was discontinued in November 2022.)*
 
 
 ## Instructions
@@ -62,5 +62,9 @@ For easier onboarding, module-level documentation is available throughout the co
 | [HOC](src/components/hoc/README.md) | `src/components/hoc/` | Higher-order component patterns and usage |
 | [Utilities](src/util/README.md) | `src/util/` | Helper functions for common operations |
 | [Assets](src/assets/README.md) | `src/assets/` | Static assets including images, styles, and locale constants |
+| [Locale Text](src/assets/text/README.md) | `src/assets/text/` | Localization constants and user-facing string catalog |
+| [Images](src/assets/images/README.md) | `src/assets/images/` | SVG icon assets for UI controls |
+| [Styles](src/assets/style/README.md) | `src/assets/style/` | Global CSS stylesheet architecture and theming |
+| [Tests](src/__tests__/README.md) | `src/__tests__/` | Unit test suite for services and utilities |
 
 Start with the [Source Code](src/README.md) README for a guided tour of the codebase.

@@ -4,7 +4,7 @@
 
 ## Overview
 
-This is the client-side application root for the React Todo App. It contains the single runtime entry point (`index.js`) and four organized subfolders that separate concerns: assets for static resources, components for the React UI layer, services for business logic, and utilities for shared helper functions.
+This is the client-side application root for the React Todo App. It contains the single runtime entry point (`index.js`) and four organized subfolders that separate concerns: assets for static resources, components for the React UI layer, services for business logic, and utilities for shared helper functions. A dedicated `__tests__/` directory provides unit test coverage for the service and utility layers.
 
 ## Folder Structure
 
@@ -14,35 +14,50 @@ The following diagram shows the organization of the `src/` directory:
 flowchart TB
     subgraph src["src/"]
         INDEX["index.js<br/>(Entry Point)"]
-        
+
         subgraph assets["assets/"]
             IMAGES["images/<br/>SVG icons"]
             STYLE["style/<br/>Global CSS"]
             TEXT["text/<br/>Locale strings"]
         end
-        
+
         subgraph components["components/"]
             HOC["hoc/<br/>Higher-order components"]
             UI["ui/<br/>Presentational components"]
             WRAPPERS["wrappers/<br/>State & event handlers"]
         end
-        
+
         subgraph services["services/"]
             TODO["todo.js"]
             FILTER["filter.js"]
             MODE["mode.js"]
         end
-        
+
         subgraph util["util/"]
             COMMON["common.js"]
         end
+
+        subgraph tests["__tests__/"]
+            subgraph tests_services["services/"]
+                TODO_TEST["todo.test.js"]
+                FILTER_TEST["filter.test.js"]
+                MODE_TEST["mode.test.js"]
+            end
+            subgraph tests_util["util/"]
+                COMMON_TEST["common.test.js"]
+            end
+        end
     end
-    
+
     INDEX --> components
     components --> services
     components --> util
     components --> assets
+    tests --> services
+    tests --> util
 ```
+
+> **Note:** The `__tests__/` directory contains unit tests for the service and utility layers. All four test files (`mode.test.js`, `todo.test.js`, `filter.test.js`, `common.test.js`) are implemented and passing.
 
 ## Entry Point
 
@@ -78,6 +93,7 @@ The `root` DOM element is defined in `public/index.html`.
 | [components/](components/README.md) | React UI layer organized into HOCs, presentational components, and state wrappers |
 | [services/](services/README.md) | Business logic modules for todo operations, list filtering, and UI mode management |
 | [util/](util/README.md) | Shared helper functions for object manipulation, React children handling, and string operations |
+| [`__tests__/`](__tests__/README.md) | Unit test suite for services and utility modules |
 
 ## Related
 

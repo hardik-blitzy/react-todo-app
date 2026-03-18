@@ -16,8 +16,11 @@ Contains SVG icon files used in the application UI.
 |------|-------------|------|
 | `add.svg` | Plus icon for the create/add button | 24×24 |
 | `search.svg` | Magnifying glass icon for the search button | 24×24 |
+| `README.md` | SVG icon asset documentation | — |
 
 These icons are referenced as CSS background images in the `ButtonWrapper` component styling. The SVG format ensures crisp rendering at any display resolution.
+
+See [`images/README.md`](images/README.md) for detailed SVG icon asset documentation.
 
 ### style/
 
@@ -26,6 +29,7 @@ Contains the global stylesheet for the application.
 | File | Description |
 |------|-------------|
 | `index.css` | Global styles imported by the application entry point |
+| `README.md` | Stylesheet architecture documentation |
 
 The `index.css` file provides styling for:
 
@@ -40,6 +44,8 @@ The `index.css` file provides styling for:
 
 This stylesheet works alongside Bootstrap CSS, which is imported separately in `src/index.js`.
 
+See [`style/README.md`](style/README.md) for the complete stylesheet architecture documentation.
+
 ### text/
 
 Contains locale string constants for internationalization support.
@@ -47,6 +53,7 @@ Contains locale string constants for internationalization support.
 | File | Description |
 |------|-------------|
 | `en_US.js` | English (US) locale constants |
+| `README.md` | Locale catalog documentation |
 
 The `en_US.js` file exports three string constants:
 
@@ -57,6 +64,8 @@ The `en_US.js` file exports three string constants:
 | `INFO_CANCEL_SHORTCUT_KEY` | "Press \`Esc\` to cancel." | Hint shown during search or create mode |
 
 This structure enables future internationalization by adding additional locale files (e.g., `es_ES.js`, `fr_FR.js`).
+
+See [`text/README.md`](text/README.md) for the locale catalog documentation.
 
 ## Usage
 

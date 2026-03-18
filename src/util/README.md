@@ -20,10 +20,10 @@ Creates a new object containing only specified methods from the source object. E
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `object` | Object | The source object containing methods |
-| `attrs` | Array | Array of method names to include |
+| `object` | `Object` | The source object (typically a class instance) containing methods to extract |
+| `attrs` | `string[]` | Array of method/property names (strings) to include in the new object |
 
-**Returns:** A new object with only the selected methods, each bound to the original object.
+**Returns:** A new plain `Object` with only the named methods, each bound via `Function.prototype.bind(object)` to preserve the original `this` context.
 
 **Usage Example (from StateProvider):**
 
@@ -46,10 +46,10 @@ Clones React children elements and adds additional props to each child. This is 
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `children` | React.Children | The children elements to wrap |
-| `props` | Object | Props to merge into each child |
+| `children` | `ReactNode` | React children elements (single child, array, fragment, or null) to clone with additional props |
+| `props` | `Object` | Props object to merge into each cloned child element |
 
-**Returns:** An array of cloned children with the merged props.
+**Returns:** An array of cloned React elements, each receiving the merged props while preserving original keys, refs, and reconciliation semantics.
 
 **Usage Example (from StateProvider):**
 
@@ -103,12 +103,14 @@ export function search(list, query) {
 }
 ```
 
+**Implementation Note:** The function performs a case-sensitive check using `String.prototype.indexOf`. Callers requiring case-insensitive matching should lowercase both arguments before invoking (as `filter.js` does).
+
 **Important Note:** The function name has an intentional typo (missing 'd' in 'Includes'). This is kept for backward compatibility. When importing, use `stringInclues`, not `stringIncludes`.
 
 ## Related
 
 These utilities are used by the following modules:
 
-- [`services/filter.js`](../services/filter.js) - Uses `stringInclues` for search filtering
-- [`components/wrappers/StateProvider.js`](../components/wrappers/StateProvider.js) - Uses `objectWithOnly` and `wrapChildrenWith` for state management
-- [`components/wrappers/KeyStrokeHandler.js`](../components/wrappers/KeyStrokeHandler.js) - Uses `wrapChildrenWith` for prop forwarding
+- [`services/filter.js`](../services/filter.js) — Uses `stringInclues` for case-insensitive search filtering (the function itself is case-sensitive; `filter.js` lowercases both arguments before calling it)
+- [`components/wrappers/StateProvider.js`](../components/wrappers/StateProvider.js) — Uses `objectWithOnly` for action method extraction and `wrapChildrenWith` for state/action prop injection
+- [`components/wrappers/KeyStrokeHandler.js`](../components/wrappers/KeyStrokeHandler.js) — Uses `wrapChildrenWith` for forwarding props to child components
