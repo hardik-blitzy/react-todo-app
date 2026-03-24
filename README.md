@@ -1,78 +1,123 @@
-# React Todo App
+# Age Calculator
 
-This is a sample react todo app done step-by-step.
-This sample app was a part of react workshop.
+A Java 21 console application that calculates a user's exact age in years, months, and days from a Date of Birth (DOB) input in `DD/MM/YYYY` format.
 
-You can check the slides [here](https://speakerdeck.com/kabirbaidhya/frontend-development-with-react).
+Built with the modern `java.time` API — uses `java.time.LocalDate` and `java.time.Period` for accurate age calculation with full leap-year handling. Input validation is powered by `java.time.format.DateTimeFormatter` with strict date resolution to reject invalid dates such as `31/02/2020`.
 
-Check the demo hosted on heroku https://simplest-react-todo-app.herokuapp.com/.
+## Prerequisites
 
+- **Java 21** (LTS) — JDK, not just JRE. Verify with `java -version` and `javac -version`.
+- **Apache Maven 3.8.7+** — build and dependency management tool. Verify with `mvn -version`.
 
-## Instructions
+## Build
 
-First clone this repository.
-```bash
-$ git clone https://github.com/kabirbaidhya/react-todo-app.git
-```
-
-Install dependencies. Make sure you already have [`nodejs`](https://nodejs.org/en/) & [`npm`](https://www.npmjs.com/) installed in your system.
-```bash
-$ npm install # or yarn
-```
-
-Run it
-```bash
-$ npm start # or yarn start
-```
-
-## Steps
-Each step is a branch. Check out to the step you want to test.
+Clone the repository and build the project using Maven:
 
 ```bash
-$ git checkout <step-number>    # eg: git checkout step-1
+git clone <repository-url>
+cd <repository-directory>
 ```
-* [step-0](https://github.com/kabirbaidhya/react-todo-app/commits/step-0) - Setup app using `create-react-app`.
-* [step-1](https://github.com/kabirbaidhya/react-todo-app/commits/step-1) - React Hello World.
-* [step-2](https://github.com/kabirbaidhya/react-todo-app/commits/step-2) - Add some JSX for the todoapp.
-* [step-3](https://github.com/kabirbaidhya/react-todo-app/commits/step-3) - List todo items dynamically.
-* [step-4](https://github.com/kabirbaidhya/react-todo-app/commits/step-4) - Create `TodoList` component.
-* [step-5](https://github.com/kabirbaidhya/react-todo-app/commits/step-5) - Extract more components: `TodoItem`, & `Header`.
-* [step-6](https://github.com/kabirbaidhya/react-todo-app/commits/step-6) - Add `Footer` component to display count.
-* [step-7](https://github.com/kabirbaidhya/react-todo-app/commits/step-7) - Add `InputBox` component.
-* [step-8](https://github.com/kabirbaidhya/react-todo-app/commits/step-8) - Convert to stateful components.
-* [step-9](https://github.com/kabirbaidhya/react-todo-app/commits/step-9) - Add new todo item.
-* [step-10](https://github.com/kabirbaidhya/react-todo-app/commits/step-10) - Add todo list filter.
-* [step-11](https://github.com/kabirbaidhya/react-todo-app/commits/step-11) - Refactor code by moving logic to services.
-* [step-12](https://github.com/kabirbaidhya/react-todo-app/commits/step-12) - Make check/uncheck change the todo item status to completed/pending.
-* [step-13](https://github.com/kabirbaidhya/react-todo-app/commits/step-13) - Refactor code and design improvements.
-* [step-14](https://github.com/kabirbaidhya/react-todo-app/commits/step-14) - Refactor and separate UI & stateful components.
-* [step-15](https://github.com/kabirbaidhya/react-todo-app/commits/step-15) - Finalization of TodoApp.
 
-## Module Documentation
+**Compile the source code:**
 
-Ready to explore the codebase? We've documented each part of the app to help you find your way around. Whether you're new to the project or just need a refresher, you'll find friendly guides in every folder explaining what's there and how it all fits together.
+```bash
+mvn compile
+```
 
-### Where to Start
+**Compile and package into an executable JAR:**
 
-If you're new here, we suggest following this reading order:
+```bash
+mvn package
+```
 
-1. **Start with [Source Code](src/README.md)** — Get the big picture of how the project is organized
-2. **Explore [Components](src/components/README.md)** — See how all the UI pieces fit together
-3. **Check out [Services](src/services/README.md)** — Understand where the app's logic lives
+**Clean build artifacts:**
 
-Once you're comfortable with those, feel free to dive into any area that interests you!
+```bash
+mvn clean
+```
 
-### All Modules at a Glance
+## Usage
 
-| Module | Path | Description |
-|--------|------|-------------|
-| [Source Code](src/README.md) | `src/` | Your starting point — see how the project is organized |
-| [Services](src/services/README.md) | `src/services/` | Where the app's brain lives — handles your todo items, filters, and mode switching |
-| [Components](src/components/README.md) | `src/components/` | See how all the UI pieces fit together |
-| [UI Components](src/components/ui/README.md) | `src/components/ui/` | The building blocks you see on screen — buttons, lists, inputs, and more |
-| [Wrappers](src/components/wrappers/README.md) | `src/components/wrappers/` | Smart components that manage state and handle what happens when you interact with the app |
-| [HOC](src/components/hoc/README.md) | `src/components/hoc/` | A handy pattern for sharing behavior between components (don't worry, we explain it simply!) |
-| [Utilities](src/util/README.md) | `src/util/` | Helpful little functions that make life easier |
-| [Assets](src/assets/README.md) | `src/assets/` | Images, styles, and text that give the app its look and feel |
+After compiling, run the console application with:
 
-Happy exploring! If you have any questions, the [Source Code](src/README.md) README is a great place to start.
+```bash
+java -cp target/classes com.agecalculator.Main
+```
+
+Or, after packaging, run the JAR directly:
+
+```bash
+java -jar target/age-calculator-1.0-SNAPSHOT.jar
+```
+
+### Sample Interaction
+
+```
+Enter your Date of Birth (DD/MM/YYYY): 15/08/1998
+Your age is 27 years, 6 months, and 15 days.
+```
+
+### Input Validation
+
+The application validates all user input and provides meaningful error messages:
+
+- **Invalid date** — dates that do not exist (e.g., `31/02/2020`) are rejected
+- **Future date** — dates after today are rejected with an appropriate message
+- **Malformed input** — input that does not match the `DD/MM/YYYY` format is rejected
+- **Leap-year awareness** — `29/02/2000` is accepted (valid leap year), `29/02/2001` is rejected (not a leap year)
+
+## Testing
+
+Run the full JUnit 5 test suite with:
+
+```bash
+mvn test
+```
+
+### Test Coverage
+
+The test suite includes comprehensive coverage across two test classes:
+
+**AgeCalculatorTest** — verifies core age-calculation logic:
+
+- Normal DOB (e.g., `15/08/1998`) — computes correct years, months, and days
+- Leap year DOB (`29/02/2000`) — handles February 29 births correctly
+- Same-day birth — returns zero years, months, and days
+- Age boundary conditions — validates edge cases around month and year transitions
+
+**InputValidatorTest** — verifies input validation and error handling:
+
+- Invalid date (`31/02/2020`) — rejects non-existent dates
+- Future date — rejects dates that have not yet occurred
+- Wrong format input — rejects input that does not match `DD/MM/YYYY`
+- Empty and null input — handles missing input gracefully
+
+## Project Structure
+
+```
+├── pom.xml                                        # Maven project descriptor (Java 21, JUnit 5)
+├── README.md                                      # Project documentation
+├── src/
+│   ├── main/java/com/agecalculator/
+│   │   ├── Main.java                              # Console entry point (Scanner-based user interaction)
+│   │   ├── AgeCalculator.java                     # Core age-calculation logic (LocalDate, Period)
+│   │   ├── AgeResult.java                         # Immutable value object (years, months, days)
+│   │   └── InputValidator.java                    # Input parsing and validation (strict DateTimeFormatter)
+│   └── test/java/com/agecalculator/
+│       ├── AgeCalculatorTest.java                 # Unit tests for age-calculation logic
+│       └── InputValidatorTest.java                # Unit tests for input validation and error handling
+└── blitzy/documentation/
+    ├── Project Guide.md                           # Migration handoff documentation
+    └── Technical Specifications.md                # Migration specification and file mapping
+```
+
+## Design
+
+The application follows Object-Oriented Programming principles with a clean separation of concerns:
+
+| Class | Responsibility |
+|---|---|
+| **Main** | Console entry point — reads user input via `java.util.Scanner`, delegates to validator and calculator, and displays the formatted result |
+| **AgeCalculator** | Core business logic — accepts a `LocalDate` DOB and computes the age as a `Period` using `Period.between()` |
+| **AgeResult** | Immutable value object — encapsulates the age breakdown (years, months, days) with a formatted `toString()` output |
+| **InputValidator** | Input validation — parses `DD/MM/YYYY` strings into `LocalDate` using `DateTimeFormatter` with `ResolverStyle.STRICT`, rejects future dates and invalid calendar dates |
