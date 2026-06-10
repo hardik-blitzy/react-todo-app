@@ -1,4 +1,8 @@
-# Blitzy Project Guide — React Todo App System Orientation Layer
+# Blitzy Project Guide
+
+> **React Todo App — Scope Clarification & Baseline Validation**
+> Branch: `blitzy-eeb2d349-c5bb-4c28-8a84-4f589458987a` · HEAD: `aa2fbee`
+> Brand legend: <span style="color:#5B39F3">**■ Completed / AI Work (Dark Blue #5B39F3)**</span> · **□ Remaining / Not Completed (White #FFFFFF)**
 
 ---
 
@@ -6,55 +10,66 @@
 
 ### 1.1 Project Overview
 
-The **React Todo App** is a step-by-step educational single-page application built with React 15.x, designed to teach front-end developers core React patterns through an incremental, workshop-driven curriculum of 16 branches (`step-0` through `step-15`). This project scope establishes the comprehensive **System Orientation Layer** — delivering module-level documentation with Mermaid diagrams, inline JSDoc annotations across all source files, a complete unit test suite for the service and utility layers, and configuration metadata enhancements. The target audience includes workshop participants, self-paced learners, and onboarding developers.
+This engagement targeted a reported UI defect in a **Mermaid-diagram rich-text editor** — desktop auto-scroll and mobile flicker when formatting controls are used after inserting an empty Mermaid embed, across "Rules", "Codebase Context", and "Build Prompt" tabs. The repository under analysis, however, is a **React 15.4.2 educational Todo List single-page application** whose entire surface is todo creation, status toggling, filtering, search, and keyboard-mode switching. It contains **no rich-text editor, no formatting toolbar, no Mermaid feature, and none of the named tabs**. The Agent Action Plan therefore faithfully captured intent, documented the conflict with evidence, and resolved it as a **clarification request with zero in-scope files**. Blitzy completed all scoped analysis and validated the existing baseline; the remaining work is a human clarification action.
 
 ### 1.2 Completion Status
 
+**AAP-scoped completion: `78.3%`** — computed as Completed Hours ÷ Total Project Hours = 18 ÷ 23, per the PA1 methodology (AAP-scoped + path-to-production work only; the out-of-scope Mermaid-editor feature is excluded).
+
 ```mermaid
-pie title Project Completion — 89.7%
-    "Completed (AI)" : 52
-    "Remaining" : 6
+%%{init: {"theme":"base","themeVariables":{"pie1":"#5B39F3","pie2":"#FFFFFF","pieStrokeColor":"#B23AF2","pieStrokeWidth":"2px","pieOuterStrokeWidth":"2px","pieSectionTextColor":"#1a1a1a","pieTitleTextColor":"#B23AF2"}}}%%
+pie showData
+    title AAP-Scoped Completion — 78.3% Complete
+    "Completed Work (AI)" : 18
+    "Remaining Work" : 5
 ```
 
-| Metric | Value |
-|--------|-------|
-| **Total Project Hours** | 58h |
-| **Completed Hours (AI)** | 52h |
-| **Remaining Hours** | 6h |
-| **Completion Percentage** | 89.7% |
+> **Center metric: `78.3% Complete`** (Mermaid pie has no native center label; the percentage is shown in the chart title and here.)
 
-**Calculation**: 52h completed / (52h + 6h remaining) × 100 = **89.7%**
+| Metric | Hours |
+|---|---|
+| **Total Hours** | **23** |
+| **Completed Hours (AI + Manual)** | **18** (AI: 18 · Manual: 0) |
+| **Remaining Hours** | **5** |
+| **Percent Complete** | **78.3%** |
 
 ### 1.3 Key Accomplishments
 
-- ✅ Created 4 new unit test files with 72 tests, all passing (100% pass rate)
-- ✅ Added comprehensive JSDoc documentation to 9 source files across all architectural layers
-- ✅ Created 3 new asset-layer README files (text, images, style)
-- ✅ Enhanced 8 existing README files with Mermaid diagrams, API tables, and prop documentation
-- ✅ Updated `package.json` with project metadata (description, repository, keywords)
-- ✅ Updated `public/index.html` with meta description for project identity
-- ✅ Verified production build integrity: 53.95 KB JS + 19.33 KB CSS (gzipped) — matches baseline exactly
-- ✅ Updated root `README.md` Module Documentation table with 4 new entries
-- ✅ Annotated Heroku demo URL as unavailable (HTTP 404) for accuracy
+- ✅ **Comprehensive repository scope discovery** — full-tree inventory of 26 `.js` source files (1,743 LOC) plus 8 integration surfaces; conclusively established the reported feature is absent.
+- ✅ **Independent feature-absence verification** — full-tree search confirmed `scrollIntoView`, `toolbar`, `contenteditable`, `rich-text`, `build prompt`, `codebase context`, `preventScroll` all return **0 hits** in application code (the 7 `mermaid` hits are markdown architecture-diagram fences only).
+- ✅ **Requirement analysis & intent clarification** — parsed rule `newtestrules`, extracted four acceptance criteria, trigger conditions, implicit requirements, and feature prerequisites.
+- ✅ **Clarification request authored** — the AAP's sole legitimate deliverable, identifying exactly what the requester must supply.
+- ✅ **Baseline dependency validation** — `npm install --legacy-peer-deps` succeeds (exit 0); lockfile hygiene preserved.
+- ✅ **Clean compilation** — `CI=true npm run build` → "Compiled successfully", **zero warnings** (53.95 KB JS + 19.33 KB CSS gzipped).
+- ✅ **100% test pass** — `CI=true npm test` → **72/72 tests** across 4 suites.
+- ✅ **Runtime & UI verification** — production bundle serves (HTTP 200), React mounts, full Todo UI renders and is interactive; zero console errors.
+- ✅ **All five production-readiness gates PASS** with zero source/test/config changes.
 
 ### 1.4 Critical Unresolved Issues
 
 | Issue | Impact | Owner | ETA |
-|-------|--------|-------|-----|
-| `src/__tests__/README.md` shows 3 test files as "🔲 Planned" when implemented and passing | Low — cosmetic documentation inaccuracy; no functional impact | Human Developer | 0.5h |
-| 196 npm audit vulnerabilities (all legacy dependency-related) | Medium — expected for React 15.x / CRA 0.9.0 educational project; no runtime impact for client-side SPA | Human Developer | 2h |
+|---|---|---|---|
+| Reported defect describes a Mermaid rich-text editor absent from this repository — cannot be implemented or validated here | Requirement cannot progress to a code fix until the correct target is identified | Requester / Product Owner | Upon clarification (≈1 day) |
+| Rule `newtestrules` carries strong placeholder/test markers (`1111111` prefix, duplicated body, empty "Screen Recording") | Requirement may be test noise; risk of acting on invalid input | Requester / QA | Upon clarification |
+| Correct target repository / corrected requirements not yet supplied | Blocks re-scope and any real implementation | Requester | Upon clarification |
 
 ### 1.5 Access Issues
 
-No access issues identified. All dependencies resolve from the public npm registry. The repository is accessible, and no third-party API credentials or service accounts are required for development or build verification.
+| System/Resource | Type of Access | Issue Description | Resolution Status | Owner |
+|---|---|---|---|---|
+| Source repository (`react-todo-app`) | Read/Write (git) | Full access; analysis, build, test, and runtime validation all succeeded | ✅ No issue | Blitzy |
+| `npm` registry (audit metadata) | Network read | `npm audit --json` did not return populated severity metadata in this offline-leaning environment; advisory count cited from prior validation logs (~193) | ⚠ Informational only — non-blocking | Platform |
+| Correct target application (Mermaid editor host) | Repository access | The application that actually contains the editor + Rules/Codebase Context/Build Prompt tabs has not been provided | ❌ Pending — required to proceed | Requester |
+
+> Build validation itself had **no access issues**; the only access gap is the (external) correct target repository that hosts the reported feature.
 
 ### 1.6 Recommended Next Steps
 
-1. **[Medium]** Fix `src/__tests__/README.md` status markers — update 3 test entries from "🔲 Planned" to "✅ Implemented"
-2. **[Medium]** Conduct npm audit vulnerability assessment — document accepted risks and mitigations for the legacy dependency tree
-3. **[Low]** Finalize production deployment documentation — document static hosting configuration for the `build/` output directory
-4. **[Low]** Cross-validate all README Mermaid diagrams against actual source file structure for ongoing accuracy
-5. **[Low]** Conduct final code review and acceptance testing of all documentation and test artifacts
+1. **[High]** Confirm whether the rule `newtestrules` is a genuine requirement or placeholder/test data before allocating further effort.
+2. **[High]** Identify and supply the **correct target repository** — the application that actually contains the Mermaid rich-text editor and the Rules / Codebase Context / Build Prompt tabs — and/or corrected requirements scoped to this Todo app.
+3. **[High]** Re-run Blitzy planning against the correct codebase to regenerate the AAP with a concrete, file-level scope.
+4. **[Medium]** Maintain the current React 15.x version lock and lockfile hygiene; do **not** run `npm audit fix` or `eject`.
+5. **[Low]** (Optional, non-blocking) Consider adding `id`/`name` attributes to the create-todo/search inputs to clear the DevTools best-practice advisory.
 
 ---
 
@@ -62,371 +77,360 @@ No access issues identified. All dependencies resolve from the public npm regist
 
 ### 2.1 Completed Work Detail
 
+All completed work was performed autonomously by Blitzy agents (AI). Each component traces to a specific AAP deliverable or path-to-production activity.
+
 | Component | Hours | Description |
-|-----------|-------|-------------|
-| Unit Test Suite — `todo.test.js` | 5.0 | 27 tests covering `getAll`, `getItemById`, `updateStatus`, `addToList`, and edge cases for the immutable CRUD service (210 lines) |
-| Unit Test Suite — `filter.test.js` | 4.0 | 24 tests covering `applyFilter`, `search`, `getOptions`, filter constants, and edge cases (173 lines) |
-| Unit Test Suite — `mode.test.js` | 2.0 | 15 tests covering mode FSM transitions via `getNextModeByKey` for all key combinations (72 lines) |
-| Unit Test Suite — `common.test.js` | 3.0 | 6 test groups covering `objectWithOnly`, `wrapChildrenWith`, and `stringInclues` utility functions (167 lines) |
-| JSDoc — Wrapper Components | 4.5 | Comprehensive JSDoc annotations for `StateProvider.js` (139 lines added), `App.js` (59 lines), `KeyStrokeHandler.js` (93 lines) |
-| JSDoc — UI Container & Services | 5.0 | JSDoc documentation for `TodoList.js` (56 lines), `todo.js` (104 lines), `filter.js` (77 lines) |
-| JSDoc — Utilities & Assets | 2.5 | JSDoc for `common.js` (68 lines), `en_US.js` (30 lines), `index.css` (40 lines of CSS comments), `index.js` (18 lines) |
-| New README — Asset Sub-layers | 5.0 | Created `src/assets/text/README.md` (51 lines), `src/assets/images/README.md` (137 lines), `src/assets/style/README.md` (161 lines) |
-| Enhanced README — Component Layer | 8.0 | Enhanced `src/components/README.md` (250 lines), `src/components/ui/README.md` (281 lines), `src/components/wrappers/README.md` (248 lines), `src/components/hoc/README.md` (124 lines) |
-| Enhanced README — Service & Utility Layers | 3.5 | Enhanced `src/services/README.md` (244 lines) with API tables and Mermaid diagrams; `src/util/README.md` (116 lines) with interface details |
-| Enhanced README — Root & Source | 3.0 | Updated `README.md` (4 new Module Documentation entries), `src/README.md` (added `__tests__/` directory), `src/assets/README.md` (sub-folder links) |
-| Configuration Updates | 1.5 | `package.json` metadata (description, repository, keywords); `public/index.html` meta description |
-| Build & Runtime Verification | 3.0 | Dependency installation verification, production build verification, dev server runtime testing, screenshot capture and validation |
-| Bug Fixes & Polish | 2.0 | Fixed stale CSS line references, documentation link consistency, Heroku demo URL annotation (2 fix commits) |
-| **Total** | **52.0** | |
+|---|---:|---|
+| Requirement Analysis & Intent Clarification | 2.0 | Parsed rule `newtestrules`; extracted 4 acceptance criteria, trigger conditions, implicit requirements, feature prerequisites, and technical interpretation (AAP §0.1). |
+| Repository Scope Discovery & File/Integration Analysis | 5.0 | Full-tree inventory of 26 `.js` files (1,743 LOC); 8 integration-surface checks; full-tree feature-term search proving absence (AAP §0.2). |
+| Dependency & Integration Analysis | 1.5 | Confirmed zero dependency changes and zero integration touchpoints; documented root composition `StateProvider → KeyStrokeHandler → TodoList` (AAP §0.3–§0.4). |
+| Technical Implementation Determination (Empty Action Set + Conditional Guidance) | 1.5 | Established empty CREATE/UPDATE/DELETE/REFERENCE set; recorded conditional host-app fix approach and the tangential `autoFocus` analog (AAP §0.5). |
+| Scope Boundaries & Acceptance-Criteria Capture | 1.5 | Exhaustive in-scope/out-of-scope determination; host-app acceptance criteria preserved (AAP §0.6–§0.7). |
+| Clarification Request Authoring & Finding Documentation | 1.5 | Authored the clarification request (the sole deliverable) with full evidentiary basis. |
+| Baseline Dependency Install & Lockfile Hygiene Validation | 1.0 | `npm install --legacy-peer-deps` (exit 0); restored `yarn.lock`; removed generated `package-lock.json`. |
+| Compilation (Production Build) Validation | 0.5 | `CI=true npm run build` → "Compiled successfully", 0 warnings (53.95 KB JS + 19.33 KB CSS gz). |
+| Test Suite Validation (72/72) | 0.5 | `CI=true npm test` → 4 suites, 72/72 tests pass, 0 failures. |
+| Runtime & UI Verification | 2.0 | Served production bundle (HTTP 200); React mount + full Todo UI render; interactivity confirmed; screenshot captured. |
+| Production-Readiness Gate Assessment (5 gates) | 1.0 | Evaluated and confirmed all five gates PASS. |
+| **Total Completed** | **18.0** | **Matches Completed Hours in §1.2.** |
 
 ### 2.2 Remaining Work Detail
 
-| Category | Base Hours | Priority | After Multiplier |
-|----------|-----------|----------|-----------------|
-| Fix `src/__tests__/README.md` status markers | 0.5 | Medium | 0.5 |
-| npm Audit Vulnerability Assessment & Documentation | 1.5 | Medium | 2.0 |
-| Production Deployment Documentation | 1.0 | Low | 1.5 |
-| Final Documentation Cross-Reference Validation | 1.0 | Low | 1.0 |
-| Code Review & Acceptance Testing | 1.0 | Medium | 1.0 |
-| **Total** | **5.0** | | **6.0** |
+Each remaining category is a human/path-to-production activity required to unblock the requirement. Building the Mermaid-editor feature is **out of scope** (AAP §0.6.2) and is **not** counted here.
 
-### 2.3 Enterprise Multipliers Applied
+| Category | Hours | Priority |
+|---|---:|---|
+| Clarification Resolution — confirm requirement authenticity + supply the correct target repository and/or corrected requirements | 3.0 | High |
+| Requirement Triage & Re-Scope/Re-Plan Handoff — regenerate the AAP against the correct codebase | 2.0 | High |
+| **Total Remaining** | **5.0** | **Matches Remaining Hours in §1.2 and the Section 7 pie chart.** |
 
-| Multiplier | Value | Rationale |
-|-----------|-------|-----------|
-| Compliance Review | 1.10x | Educational project requires documentation accuracy verification; legacy dependency vulnerability documentation for stakeholder awareness |
-| Uncertainty Buffer | 1.10x | Minor uncertainty in npm audit assessment scope — 196 advisories may require varying depth of analysis depending on deployment context |
-| **Compound Multiplier** | **1.21x** | Applied to 5.0h base remaining → 6.05h → rounded to 6.0h |
+> **Reconciliation:** §2.1 (18.0) + §2.2 (5.0) = **23.0 Total Project Hours** = §1.2 Total. ✔
 
 ---
 
 ## 3. Test Results
 
-| Test Category | Framework | Total Tests | Passed | Failed | Coverage % | Notes |
-|--------------|-----------|-------------|--------|--------|------------|-------|
-| Unit — Todo Service | Jest (react-scripts 0.9.0) | 27 | 27 | 0 | N/A | `getAll`, `getItemById`, `updateStatus`, `addToList`, edge cases |
-| Unit — Filter Service | Jest (react-scripts 0.9.0) | 24 | 24 | 0 | N/A | `applyFilter`, `search`, `getOptions`, constants, edge cases |
-| Unit — Mode Service | Jest (react-scripts 0.9.0) | 15 | 15 | 0 | N/A | All FSM transitions: `/`, `N`, `Escape` key mappings |
-| Unit — Common Utilities | Jest (react-scripts 0.9.0) | 6 | 6 | 0 | N/A | `objectWithOnly`, `wrapChildrenWith`, `stringInclues` |
-| **Total** | **Jest / jsdom** | **72** | **72** | **0** | **N/A** | **100% pass rate — 0.432s execution time** |
+All tests below originate from Blitzy's autonomous validation logs and were **independently re-executed and confirmed** during this assessment (`CI=true npm test`, exit 0, ~1.2 s).
 
-> **Note**: Coverage percentage is not available because CRA 0.9.0's bundled Jest version does not include `--coverage` by default. All 72 tests originate from Blitzy's autonomous test creation and validation process. Test command: `CI=true npm test -- --watchAll=false`
+| Test Category | Framework | Total Tests | Passed | Failed | Coverage % | Notes |
+|---|---|---:|---:|---:|---|---|
+| Unit — Filter service (`filter.test.js`) | Jest 18.1.0 (react-scripts, jsdom) | 22 | 22 | 0 | n/a | `applyFilter` + `search` pure functions; 4 describe blocks |
+| Unit — Todo service (`todo.test.js`) | Jest 18.1.0 (react-scripts, jsdom) | 22 | 22 | 0 | n/a | Immutable add/update operations; 5 describe blocks |
+| Unit — Util helpers (`common.test.js`) | Jest 18.1.0 (react-scripts, jsdom) | 13 | 13 | 0 | n/a | `objectWithOnly`, `wrapChildrenWith`, `stringInclues`; 3 describe blocks |
+| Unit — Mode FSM (`mode.test.js`) | Jest 18.1.0 (react-scripts, jsdom) | 15 | 15 | 0 | n/a | Keyboard-mode transition table; 5 describe blocks |
+| **TOTAL** | **Jest 18.1.0** | **72** | **72** | **0** | **n/a** | **4 suites, 100% pass rate** |
+
+- **Pass rate: 100% (72/72).** Zero failures, zero skipped, zero blocked.
+- **Coverage:** A coverage report was not generated by the autonomous run (the project's `test` script does not include `--coverage`); therefore coverage % is reported as `n/a` rather than fabricated.
+- **Test types present:** Unit only. There are no integration, UI, API, or end-to-end suites in this repository (consistent with a small educational SPA).
 
 ---
 
 ## 4. Runtime Validation & UI Verification
 
-**Dependency Installation**
-- ✅ `npm install --legacy-peer-deps` — 842 packages installed successfully
-- ✅ All 7 dependencies verified at declared versions: react 15.4.2, react-dom 15.4.2, bootstrap 3.4.1, recompose 0.23.5, immutability-helper 2.1.1, keycode-js 0.0.4, react-scripts 0.9.0
+Legend: ✅ Operational · ⚠ Partial / Advisory · ❌ Failing or Not Present
 
-**Production Build**
-- ✅ `npm run build` — Compiled successfully with zero ESLint violations
-- ✅ Bundle sizes: 53.95 KB JS + 19.33 KB CSS (gzipped) — matches baseline exactly
-- ✅ Build output ready for static hosting deployment
+**Runtime Health (existing Todo app baseline)**
+- ✅ **Production build served** — `GET /` → HTTP 200 (544 bytes; contains `<div id="root">`).
+- ✅ **Primary JS bundle served** — `GET /static/js/main.76df5604.js` → HTTP 200 (184,510 bytes).
+- ✅ **React mount & render** — full Todo UI renders: heading "THINGS TO DO", autofocused "Add New" input, three seeded todos ("Learn Javascript", "Learn React", "Build a React App"), footer with add/search icons, "3 items left" counter, and All/Active/Completed filters.
+- ✅ **Interactivity** — toggling a todo checkbox updated the active counter ("3 items left" → "2 items left"), confirming event handlers, state container, immutable service, and re-render all function.
+- ✅ **Console cleanliness** — zero errors/warnings; only a benign educational "got props" debug log.
 
-**Development Server**
-- ✅ `npm start` — Dev server starts successfully, compiled without errors
-- ✅ HTTP 200 response confirmed on localhost
+**UI Verification**
+- ✅ **Single-screen Todo manager** verified against the runtime screenshot (`blitzy/screenshots/runtime_validation_todo_app_desktop.png`).
+- ⚠ **DevTools advisory** — create-todo/search inputs lack `id`/`name` attributes; non-breaking, **out of scope** (AAP §0.6.2).
 
-**UI Feature Verification** (via browser screenshots)
-- ✅ F-001: Todo Item Creation — InputBox renders in create mode, items added to list
-- ✅ F-002: Status Toggling — CheckBox toggles between pending/completed states
-- ✅ F-003: Filtered Views — All/Active/Completed filter anchors functional with correct item counts
-- ✅ F-004: Text Search — SearchBox filters items in real-time (case-insensitive)
-- ✅ F-006: Responsive Layout — Verified at 375px, 500px, 800px, 1280px, 1920px viewports
-- ✅ F-007: Localized UI Text — `MSG_NO_ITEMS` empty state alert renders correctly
-- ✅ F-008: Centralized State Management — State consistency verified across filter/search operations
+**API Integration**
+- ✅ **N/A by design** — standalone client-side SPA with no backend, network layer, or persistence; nothing to integrate.
 
-**API / Network**
-- ⚠ Not applicable — Client-side SPA with in-memory state; no backend API endpoints
+**Reported-Defect Surfaces (the requirement's targets)**
+- ❌ **Mermaid rich-text editor** — not present in this repository.
+- ❌ **Formatting toolbar (Bold/italic/H1–H3/lists/inline code/code block)** — not present.
+- ❌ **Rules / Codebase Context / Build Prompt tabs** — not present.
+- ❌ **Desktop auto-scroll / Android mobile flicker symptoms** — not reproducible (the feature that exhibits them does not exist here).
+
+> **Conclusion:** The existing application is fully **operational**; the reported defect cannot be reproduced because its host feature is absent.
 
 ---
 
 ## 5. Compliance & Quality Review
 
-| Compliance Area | Requirement | Status | Evidence |
-|----------------|------------|--------|----------|
-| React 15.x Compatibility | No Hooks, Context API, createRoot, Fragments | ✅ Pass | All source files use class components and `React.Children.map`/`cloneElement`; no modern APIs detected |
-| CRA Zero-Config | No ejection, no custom Webpack/Babel/ESLint | ✅ Pass | No configuration files added; `react-scripts build` succeeds |
-| Build Integrity | Production build passes, baseline sizes maintained | ✅ Pass | 53.95 KB JS + 19.33 KB CSS — exact match to baseline |
-| EditorConfig Compliance | 4-space indent, LF endings, UTF-8, final newline | ✅ Pass | All 28 processed files comply with `.editorconfig` rules |
-| Immutable State Updates | `immutability-helper` or `concat()` for list ops | ✅ Pass | `todo.js` uses `update()` with `$set`; no direct state mutation detected |
-| Workshop Branch Preservation | 16-step curriculum unchanged | ✅ Pass | Steps `step-0` through `step-15` in `README.md` untouched |
-| Locale Centralization | User-facing strings in `en_US.js` | ✅ Pass | `MSG_NO_ITEMS`, `INFO_SHORTCUT_KEYS`, `INFO_CANCEL_SHORTCUT_KEY` exported |
-| Service Layer Purity | No React imports, no DOM access, no side effects | ✅ Pass | `todo.js`, `filter.js`, `mode.js` — pure functions only |
-| Dependency Installation | `--legacy-peer-deps` resolves all packages | ✅ Pass | 842 packages installed successfully |
-| Test Suite | 72 tests passing, 100% pass rate | ✅ Pass | 4 test suites covering services and utilities |
-| Documentation Coverage | README files for all architectural layers | ✅ Pass | 11 README files (3 new, 8 enhanced) with Mermaid diagrams |
-| `private: true` Guard | Non-distributable educational project marker | ✅ Pass | `package.json` retains `"private": true` |
+Cross-mapping of AAP deliverables and quality benchmarks to outcomes. Fixes applied during autonomous validation are noted; no source fixes were required because there were zero in-scope files.
 
-**Autonomous Validation Fixes Applied:**
-1. Fixed stale CSS line number references in documentation (commit `c1615dc`)
-2. Resolved documentation link consistency issues (commit `23a907b`)
-3. Annotated Heroku demo URL as unavailable — HTTP 404 (commit `950c880`)
+| Benchmark / AAP Deliverable | Status | Progress | Evidence / Notes |
+|---|---|---|---|
+| AAP intent faithfully captured (no fabrication) | ✅ Pass | 100% | Clarification-request determination; zero invented files (AAP §0.5.1). |
+| Zero unwarranted source modifications | ✅ Pass | 100% | `git diff f0aab74..HEAD` = screenshot only; 0 source/test/config changes. |
+| Comprehensive scope discovery | ✅ Pass | 100% | 26-file inventory + 8 integration surfaces + full-tree term search (AAP §0.2). |
+| Compilation clean | ✅ Pass | 100% | `CI=true npm run build` → 0 warnings. |
+| Unit tests pass | ✅ Pass | 100% | 72/72 across 4 suites. |
+| Runtime operational | ✅ Pass | 100% | HTTP 200 + interactive UI + zero console errors. |
+| Lockfile hygiene preserved | ✅ Pass | 100% | `yarn.lock` pristine; generated `package-lock.json` not committed. |
+| React 15.x version lock preserved | ✅ Pass | 100% | No `eject`, no root webpack/babel/eslint config, no `npm audit fix`. |
+| Clarification request raised | ✅ Pass | 100% | Sole AAP deliverable delivered (AAP §0.6.1). |
+| Reported feature implemented | ⛔ N/A | Out of scope | Feature belongs to a different application; building it would be fabrication (AAP §0.6.2). |
+| Security advisories remediated | ⚠ Accepted | Documented | ~193 legacy transitive-dep advisories intentionally retained to preserve the version lock. |
+| Input `id`/`name` best practice | ⚠ Advisory | Out of scope | Pre-existing DevTools advisory on InputBox/SearchBox; non-breaking. |
 
 ---
 
 ## 6. Risk Assessment
 
 | Risk | Category | Severity | Probability | Mitigation | Status |
-|------|----------|----------|-------------|------------|--------|
-| 196 npm audit vulnerabilities (71 critical, 52 high) in legacy dependency tree | Security | Medium | High | All vulnerabilities originate from `react-scripts` 0.9.0 transitive dependencies (2016-era tooling). Client-side SPA with no backend, no auth, no user data — attack surface is minimal. Document as accepted risk for educational context | Open — requires human assessment |
-| `src/__tests__/README.md` shows stale status markers | Technical | Low | Certain | Update 3 entries from "🔲 Planned" to "✅ Implemented" — 0.5h fix | Open — cosmetic |
-| React 15.x EOL — no security patches | Technical | Low | High | Intentional for educational curriculum targeting pre-Hooks patterns. No production deployment with user data expected | Accepted |
-| CRA 0.9.0 in maintenance mode | Technical | Low | High | Build toolchain functions correctly. No custom configuration needed. Migration to modern tooling out of scope per AAP | Accepted |
-| Recompose 0.23.5 deprecated (since Oct 2018) | Technical | Low | High | Functional for React 15.x target. Used only in `wrapInputBox.js` HOC. No active security concerns | Accepted |
-| No component-level or integration tests | Technical | Medium | High | Current suite covers service and utility layers (72 unit tests). Component rendering tests would require `react-test-renderer` 15.x — can be added as enhancement | Open — low priority |
-| No persistent data storage | Operational | Low | Certain | By design — in-memory state resets on page refresh. Explicitly out of scope per AAP Section 0.6.2 | Accepted |
-| Heroku demo URL returns HTTP 404 | Operational | Low | Certain | Annotated in `README.md` as unavailable. Demo requires separate hosting setup if needed | Documented |
+|---|---|---|---|---|---|
+| Requirement targets a Mermaid rich-text editor + Rules/Codebase Context/Build Prompt tabs absent from this repository; cannot be implemented or validated here | Technical | High | High (confirmed) | Clarification request raised; correct repo/requirements required before any code work | Open — awaiting human input |
+| Reported defect (desktop auto-scroll / mobile flicker) remains unresolved; requirement delivery is blocked | Operational | High | High (confirmed) | Prioritized clarification with named owner; flagged as the critical path | Open |
+| Rule `newtestrules` shows placeholder/test markers (`1111111` prefix, duplicated body, empty "Screen Recording") — may be test noise/invalid | Operational | Medium | Medium | Confirm requirement authenticity with requester before re-scoping | Open |
+| Re-supplied repository could again lack the required infrastructure, repeating the cycle | Integration | Medium | Medium | Provide explicit prerequisite checklist (rich-text editor + 9-control toolbar + Mermaid embed + 3 named tabs) before re-planning | Open |
+| ~193 npm-audit advisories from 2017-era transitive dependencies | Security | Medium | Low (client-side SPA: no backend/data/network → minimal exploitability) | Intentionally NOT remediated to preserve the educational React 15.x version lock; do **not** run `npm audit fix` | Accepted |
+| Legacy toolchain (react-scripts 0.9.0, React 15.4.2) could break under modern dependency upgrades / future Node majors | Technical | Low | Low (builds clean on Node 20 today) | Version lock preserved; `npm install --legacy-peer-deps` documented; no eject/config changes | Mitigated |
+| True host application's editor/Mermaid integration surface unknown until correct repo supplied | Integration | Low | Medium | Defer integration analysis to the re-scope phase | Deferred |
+| Create-todo/search inputs lack `id`/`name` attributes (DevTools best-practice advisory) | Technical | Low | Low | Pre-existing, out of scope (§0.6.2); no functional/test/security impact | Accepted (out of scope) |
+
+> **Overall posture:** The delivered **baseline codebase risk is LOW** (zero source changed, clean build, 72/72 tests, operational runtime, no new attack surface). The **requirement-delivery risk is HIGH but fully contained** by the clarification request — it is a scope/input problem, not a code-quality problem.
 
 ---
 
 ## 7. Visual Project Status
 
+**Project Hours — Completed vs Remaining** (Completed = Dark Blue `#5B39F3`, Remaining = White `#FFFFFF`)
+
 ```mermaid
-pie title Project Hours Breakdown
-    "Completed Work" : 52
-    "Remaining Work" : 6
+%%{init: {"theme":"base","themeVariables":{"pie1":"#5B39F3","pie2":"#FFFFFF","pieStrokeColor":"#B23AF2","pieStrokeWidth":"2px","pieOuterStrokeWidth":"2px","pieSectionTextColor":"#1a1a1a","pieTitleTextColor":"#B23AF2"}}}%%
+pie showData
+    title Project Hours Breakdown (78.3% Complete)
+    "Completed Work" : 18
+    "Remaining Work" : 5
 ```
 
-**Completion: 52h completed / 58h total = 89.7%**
+**Remaining Work Composition by Category** (sums to 5h — consistent with §2.2)
 
-### Remaining Work Distribution
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"pie1":"#B23AF2","pie2":"#A8FDD9","pieStrokeColor":"#5B39F3","pieStrokeWidth":"2px","pieSectionTextColor":"#1a1a1a","pieTitleTextColor":"#B23AF2"}}}%%
+pie showData
+    title Remaining Hours by Category (Total 5h)
+    "Clarification Resolution" : 3
+    "Triage & Re-Scope Handoff" : 2
+```
 
-| Category | Hours |
-|----------|-------|
-| npm Audit Vulnerability Assessment | 2.0 |
-| Production Deployment Documentation | 1.5 |
-| Code Review & Acceptance Testing | 1.0 |
-| Final Documentation Cross-Validation | 1.0 |
-| Fix `src/__tests__/README.md` Status | 0.5 |
-| **Total Remaining** | **6.0** |
+**Remaining Hours per Category (bar view)**
+
+| Category | Hours | Bar |
+|---|---:|---|
+| Clarification Resolution | 3 | ███████████████ |
+| Triage & Re-Scope Handoff | 2 | ██████████ |
+| **Total** | **5** | |
+
+> **Integrity check:** "Remaining Work" = **5** in the pie equals §1.2 Remaining Hours and the §2.2 Hours total. ✔
 
 ---
 
 ## 8. Summary & Recommendations
 
-### Achievement Summary
+**Achievements.** Blitzy completed **100% of the AAP-scoped autonomous deliverables**: a thorough, evidence-based scope discovery; a precise requirement analysis; the empty-action-set determination; a clarification request; and a full baseline validation that proves the existing React Todo App **installs, compiles cleanly, passes 72/72 tests, and runs with zero runtime errors**. Critically, the team avoided the failure mode of fabricating a Mermaid editor inside an unrelated Todo app — the correct, disciplined outcome.
 
-The React Todo App System Orientation Layer project is **89.7% complete** (52 hours completed out of 58 total hours). All AAP-scoped deliverables have been implemented, validated, and committed across 31 commits. The project achieved:
+**Remaining gaps.** The reported defect cannot be implemented here because its host feature is absent. The outstanding **5 hours** are human/path-to-production actions: confirm the requirement is genuine, supply the correct target repository and/or corrected requirements, and re-scope.
 
-- **Full test infrastructure**: 4 test files with 72 passing tests covering all service and utility modules
-- **Complete documentation suite**: 11 README files (3 new, 8 enhanced) with Mermaid architectural diagrams, API tables, and prop documentation
-- **Comprehensive JSDoc annotations**: 9 source files enhanced with inline documentation across all 5 architectural layers
-- **Zero regressions**: Production build passes with exact baseline sizes (53.95 KB JS + 19.33 KB CSS), all 72 tests pass, and runtime verified via browser
+**Critical path to production.** Clarification → correct repository → AAP regeneration → implementation (in the true host app, a separate future engagement). No code path in *this* repository leads to the requested fix.
 
-### Critical Path to Production
+**Success metrics.**
 
-For an educational workshop context, the application is fully functional and ready for use. The remaining 6 hours of work focus on documentation polish and security posture documentation:
+| Metric | Result |
+|---|---|
+| AAP-scoped completion | **78.3%** (18h / 23h) |
+| Source/test/config files changed | **0** |
+| Build status | ✅ Compiled successfully, 0 warnings |
+| Test pass rate | ✅ 72/72 (100%) |
+| Runtime status | ✅ Operational (HTTP 200, interactive) |
+| Production-readiness gates | ✅ 5/5 PASS |
 
-1. **npm audit assessment** (2.0h) — Document the 196 vulnerability advisories as accepted risks for the legacy educational dependency tree
-2. **Deployment documentation** (1.5h) — Add static hosting configuration guidance for serving the `build/` output
-3. **Code review** (1.0h) — Final human review of all documentation and test artifacts
-4. **Documentation validation** (1.0h) — Cross-reference all Mermaid diagrams and internal links
-5. **README fix** (0.5h) — Update test status markers in `src/__tests__/README.md`
-
-### Production Readiness Assessment
-
-| Criterion | Status |
-|-----------|--------|
-| Build passes | ✅ Yes |
-| Tests pass (72/72) | ✅ Yes |
-| Runtime functional | ✅ Yes |
-| Documentation complete | ✅ Yes (minor cosmetic fix needed) |
-| Security reviewed | ⚠ Pending (npm audit assessment) |
-| Deployment configured | ⚠ Pending (documentation only) |
-
-### Recommendation
-
-The project is ready for **human code review and acceptance testing**. No blocking issues exist. The 6 remaining hours represent polish and documentation tasks that can be completed in a single development session.
+**Production readiness assessment.** The existing Todo App baseline is **production-ready and healthy**. The reported requirement is **not actionable in this repository** and is **blocked pending human clarification**. Recommended disposition: **return to requester for clarification**; do not merge any feature code against this repository for this requirement. The project is **78.3% complete** with respect to AAP-scoped + path-to-production work — all autonomous work is done, and the remainder is a human decision.
 
 ---
 
 ## 9. Development Guide
 
-### System Prerequisites
+> This guide builds and runs the **existing React Todo App baseline**. It does **not** build the Mermaid-editor feature (which is absent from this repository). All commands below were executed and verified during this assessment.
 
-| Software | Version | Purpose |
-|----------|---------|---------|
-| Node.js | 20.x (verified: v20.20.1) | JavaScript runtime |
-| npm | 6.x+ (verified: 11.1.0) | Package manager |
-| Git | 2.x+ | Version control |
+### 9.1 System Prerequisites
 
-### Environment Setup
+- **Node.js** ≥ 18 (verified on **v20.20.2**)
+- **npm** ≥ 8 (verified on **10.8.2**)
+- **Git** (any recent version)
+- OS-agnostic — validated on Windows Server 2022 / PowerShell 5.1
+- **No** database, backend service, or runtime environment variables are required (standalone client-side SPA)
+
+### 9.2 Environment Setup
+
+No `.env` file or external services are needed. The only environment variable used is `CI`, set to `true` to force non-interactive (single-run) builds and tests.
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/kabirbaidhya/react-todo-app.git
-cd react-todo-app
-
-# 2. Checkout the feature branch
-git checkout blitzy-c5c34048-2c11-4f79-bcbe-a36eacd823f1
+# bash / macOS / Linux
+export CI=true
 ```
 
-No environment variables (`.env`) are required. The application is a client-side SPA with no backend services, API keys, or database connections.
+```powershell
+# PowerShell (Windows)
+$env:CI = 'true'
+```
 
-### Dependency Installation
+### 9.3 Dependency Installation
 
 ```bash
-# Install all dependencies (--legacy-peer-deps required for React 15.x dependency tree)
 npm install --legacy-peer-deps
 ```
 
-**Expected output**: `added 842 packages` (exact count may vary). Warnings about deprecated packages and peer dependency conflicts are expected and safe to ignore for this educational project.
-
-### Build Verification
-
-```bash
-# Run production build
-npm run build
-```
-
-**Expected output**:
-```
-Compiled successfully.
-
-File sizes after gzip:
-
-  53.95 KB  build/static/js/main.314d6dbd.js
-  19.33 KB  build/static/css/main.11f597be.css
-
-The build folder is ready to be deployed.
-```
-
-### Running Tests
+- The **`--legacy-peer-deps` flag is mandatory** — the 2017-era dependency tree has peer-dependency conflicts that fail a default install.
+- **Lockfile hygiene caveat (verified):** `npm install` perturbs `yarn.lock` and generates `package-lock.json`. Restore the tree afterward:
 
 ```bash
-# Run all 72 unit tests (non-interactive mode)
-CI=true npm test -- --watchAll=false
+git checkout -- yarn.lock      # restore the canonical lockfile
+rm -f package-lock.json        # do NOT commit the npm-generated lockfile
 ```
 
-**Expected output**:
-```
-PASS  src/__tests__/services/filter.test.js
-PASS  src/__tests__/services/todo.test.js
-PASS  src/__tests__/util/common.test.js
-PASS  src/__tests__/services/mode.test.js
+Expected: install exits `0`; `node_modules/` resolves `react@15.4.2`, `react-dom@15.4.2`, `react-scripts@0.9.0`, `recompose@0.23.5`, `immutability-helper@2.1.1`, `keycode-js@0.0.4`, `bootstrap@3.4.1`.
 
-Test Suites: 4 passed, 4 total
-Tests:       72 passed, 72 total
-```
+### 9.4 Application Startup
 
-### Starting the Development Server
+**Development server (hot reload, port 3000):**
 
 ```bash
-# Start CRA dev server (opens browser automatically)
 npm start
+# → CRA dev server on http://localhost:3000
 ```
 
-**Expected behavior**: Development server starts on `http://localhost:3000`. The browser opens automatically. The Todo app renders with:
-- "THINGS TO DO" heading
-- 3 seeded todo items (from `todo.getAll()`)
-- Footer with Add/Search buttons, active item count, and All/Active/Completed filters
-- Info text showing keyboard shortcuts
+**Production build + static serve (verified):**
 
-### Verification Steps
+```bash
+# PowerShell:  $env:CI='true'; npm run build
+# bash:        CI=true npm run build
+npm run build
+# → "Compiled successfully"; output in build/ (53.95 KB JS + 19.33 KB CSS gzipped)
 
-1. **UI renders correctly**: White card centered on neutral background with 3 todo items
-2. **Add a todo**: Click the "+" button → type text → press Enter → item appears in list
-3. **Toggle status**: Click a checkbox → item text shows strikethrough, count updates
-4. **Filter items**: Click "Active" or "Completed" filter links → list updates accordingly
-5. **Search items**: Click the magnifying glass button → type search text → list filters in real-time
-6. **Keyboard shortcuts**: Press `/` for search mode, `N` for create mode, `Escape` to cancel
+# Serve the static bundle (any static server works):
+cd build
+python -m http.server 9000
+# → http://localhost:9000/  (HTTP 200)
+```
 
-### Troubleshooting
+### 9.5 Verification Steps
 
-| Issue | Resolution |
-|-------|-----------|
-| `npm install` fails with peer dependency errors | Use `npm install --legacy-peer-deps` flag |
-| `npm test` enters watch mode | Use `CI=true npm test -- --watchAll=false` |
-| Port 3000 already in use | Stop the process using port 3000 or set `PORT=3001 npm start` |
-| Build fails with memory error | Increase Node.js memory: `NODE_OPTIONS=--max-old-space-size=4096 npm run build` |
-| Module not found errors | Delete `node_modules/` and reinstall: `rm -rf node_modules && npm install --legacy-peer-deps` |
+```bash
+# 1) Run the unit test suite (single run)
+#    PowerShell: $env:CI='true'; npm test
+CI=true npm test
+# Expected: 4 suites, 72/72 tests pass, exit 0
+
+# 2) Confirm the production bundle serves
+curl -I http://localhost:9000/
+# Expected: HTTP/1.0 200 OK
+
+# 3) Confirm the app shell is present
+curl -s http://localhost:9000/ | grep 'id="root"'
+# Expected: a line containing <div id="root">
+```
+
+In a browser at the served URL you should see: heading **"THINGS TO DO"**, an autofocused "Add New" field, three seeded todos, and a footer with add/search icons, a "3 items left" counter, and All/Active/Completed filters.
+
+### 9.6 Example Usage
+
+- **Add a todo:** type into "Add New" and press Enter.
+- **Toggle completion:** click a todo's checkbox — the "items left" counter updates immediately.
+- **Filter:** click All / Active / Completed in the footer.
+- **Search:** click the magnifier icon and type to filter by text.
+- **Keyboard:** press `Esc` to cancel the current create/search mode.
+
+### 9.7 Troubleshooting
+
+| Symptom | Cause | Resolution |
+|---|---|---|
+| `npm install` fails with peer-dependency errors | 2017-era dependency tree | Always use `npm install --legacy-peer-deps` |
+| Working tree dirty after install (`yarn.lock` modified, `package-lock.json` appears) | npm rewrites lockfiles | `git checkout -- yarn.lock` and `rm -f package-lock.json` |
+| `npm test` / `npm run build` appears to hang | Interactive watch mode | Set `CI=true` (forces single run) |
+| Many `npm audit` warnings | Legacy transitive dependencies | Expected & **accepted** — do **not** run `npm audit fix` (breaks the version lock) |
+| Tempted to upgrade React or `eject` | — | **Do not.** The React 15.x lock and CRA zero-config boundary are intentional (educational workshop) |
 
 ---
 
 ## 10. Appendices
 
-### A. Command Reference
+### Appendix A — Command Reference
 
-| Command | Purpose |
-|---------|---------|
-| `npm install --legacy-peer-deps` | Install all dependencies with legacy peer dep resolution |
-| `npm start` | Start CRA development server on port 3000 |
-| `npm run build` | Create optimized production build in `build/` directory |
-| `CI=true npm test -- --watchAll=false` | Run all 72 unit tests in non-interactive CI mode |
-| `npm run eject` | ⚠ Eject CRA config (irreversible — NOT recommended) |
+| Purpose | Command (bash) | Command (PowerShell) |
+|---|---|---|
+| Install dependencies | `npm install --legacy-peer-deps` | `npm install --legacy-peer-deps` |
+| Restore lockfile | `git checkout -- yarn.lock && rm -f package-lock.json` | `git checkout -- yarn.lock; Remove-Item package-lock.json -ErrorAction SilentlyContinue` |
+| Build (production) | `CI=true npm run build` | `$env:CI='true'; npm run build` |
+| Test (single run) | `CI=true npm test` | `$env:CI='true'; npm test` |
+| Dev server | `npm start` | `npm start` |
+| Serve prod bundle | `cd build && python -m http.server 9000` | `cd build; python -m http.server 9000` |
+| **Do NOT run** | `npm run eject`, `npm audit fix` | `npm run eject`, `npm audit fix` |
 
-### B. Port Reference
+### Appendix B — Port Reference
 
-| Service | Port | Protocol |
-|---------|------|----------|
-| CRA Dev Server | 3000 | HTTP |
-| Static Build Server (if using `pushstate-server`) | 9000 | HTTP |
+| Port | Service | Notes |
+|---|---|---|
+| 3000 | CRA development server (`npm start`) | Default react-scripts dev port |
+| 9000 | Static production-bundle server (example) | Any static server/port works; 9000 used in validation |
 
-### C. Key File Locations
+### Appendix C — Key File Locations
 
-| File | Purpose |
-|------|---------|
-| `src/index.js` | Application entry point — mounts `<App/>` to `div#root` |
-| `src/components/wrappers/StateProvider.js` | Centralized state container (4 fields, 5 actions) |
-| `src/components/wrappers/App.js` | Composition root: `StateProvider > KeyStrokeHandler > TodoList` |
-| `src/services/todo.js` | Immutable CRUD operations for todo items |
-| `src/services/filter.js` | Filter constants, `applyFilter()`, `search()` logic |
-| `src/services/mode.js` | Mode FSM: `MODE_NONE`, `MODE_SEARCH`, `MODE_CREATE` |
-| `src/util/common.js` | `objectWithOnly()`, `wrapChildrenWith()`, `stringInclues()` |
-| `src/assets/text/en_US.js` | English locale string constants |
-| `src/assets/style/index.css` | Global stylesheet (166 lines) |
-| `public/index.html` | HTML5 shell with `<div id="root">` mount point |
-| `package.json` | Dependency manifest, npm scripts, project metadata |
-| `.editorconfig` | Code formatting rules (4-space indent, LF, UTF-8) |
+| Path | Role |
+|---|---|
+| `src/index.js` | Entry point; mounts `<App/>` into `#root` |
+| `src/components/wrappers/App.js` | Composition shell: `StateProvider → KeyStrokeHandler → TodoList` |
+| `src/components/wrappers/StateProvider.js` | Prop-injection state container |
+| `src/components/wrappers/KeyStrokeHandler.js` | Global keyboard mode FSM |
+| `src/components/ui/` | 12 UI components (TodoList, InputBox, SearchBox, Header, Footer, etc.) |
+| `src/services/{todo,filter,mode}.js` | Pure business-logic services |
+| `src/util/common.js` | Utility helpers |
+| `src/assets/text/en_US.js` | Locale strings |
+| `src/__tests__/` | 4 Jest unit suites (72 tests) |
+| `package.json` | Manifest (React 15.x lock; scripts) |
+| `blitzy/screenshots/runtime_validation_todo_app_desktop.png` | Runtime validation evidence (this session's only commit) |
+| `blitzy/documentation/` | Technical Specification & prior project guide |
 
-### D. Technology Versions
+### Appendix D — Technology Versions
 
-| Technology | Version | Status |
-|-----------|---------|--------|
-| React | 15.4.2 | Legacy (educational — intentional) |
-| ReactDOM | 15.4.2 | Legacy (educational — intentional) |
-| Bootstrap | 3.4.1 | CSS-only usage (EOL July 2019) |
-| Recompose | 0.23.5 | Deprecated (Oct 2018) — functional for React 15.x |
-| immutability-helper | 2.1.1 | Stable |
-| keycode-js | 0.0.4 | Stable |
-| react-scripts (CRA) | 0.9.0 | Legacy (maintenance mode) |
-| Node.js | 20.x | LTS (verified: v20.20.1) |
-| npm | 6.x+ | Verified: 11.1.0 |
+| Component | Version | Source |
+|---|---|---|
+| Node.js | 20.20.2 | Verified runtime |
+| npm | 10.8.2 | Verified runtime |
+| React / React-DOM | ^15.4.2 | `package.json` (intentional lock) |
+| react-scripts (CRA) | 0.9.0 | `package.json` devDependency |
+| Jest | 18.1.0 | Bundled with react-scripts 0.9.0 |
+| bootstrap | ^3.4.1 | `package.json` |
+| immutability-helper | ^2.1.1 | `package.json` |
+| keycode-js | ^0.0.4 | `package.json` |
+| recompose | ^0.23.5 | `package.json` |
 
-### E. Environment Variable Reference
+### Appendix E — Environment Variable Reference
 
-No environment variables are required. The application is a client-side SPA with zero backend dependencies. The following CRA-standard environment variables are available if needed:
+| Variable | Value | When | Required? |
+|---|---|---|---|
+| `CI` | `true` | Build & test (forces non-interactive single run) | Recommended for automation |
+| *(runtime env vars)* | — | — | **None** — the SPA needs no runtime configuration |
 
-| Variable | Default | Purpose |
-|----------|---------|---------|
-| `PORT` | 3000 | Dev server port |
-| `CI` | (unset) | Set to `true` to disable interactive test watcher |
-| `PUBLIC_URL` | (empty) | Base URL for static assets in production build |
-| `NODE_OPTIONS` | (unset) | Node.js runtime options (e.g., `--max-old-space-size`) |
+### Appendix F — Developer Tools Guide
 
-### F. Developer Tools Guide
+- **Build/test:** `react-scripts` (CRA 0.9.0) wraps Webpack + Babel + Jest; use `CI=true` to avoid watch mode.
+- **Runtime inspection:** the production bundle was loaded in Chrome (via Chrome DevTools) to confirm React mount, render, interactivity, and a clean console. To reproduce: serve `build/`, open the URL, and check the Console (expect zero errors; one benign "got props" debug log) and Elements (verify `#root` is populated).
+- **Git diff verification:** `git diff f0aab74 HEAD --stat` (validated baseline → HEAD) shows only the screenshot; `git status --porcelain` should be empty (clean tree).
 
-| Tool | Command | Purpose |
-|------|---------|---------|
-| Jest Test Runner | `CI=true npm test -- --watchAll=false` | Run unit tests in CI mode |
-| Jest Watch Mode | `npm test` | Interactive test watcher for development |
-| CRA Dev Server | `npm start` | Hot-reloading development server |
-| Production Build | `npm run build` | Optimized static bundle generation |
-| Static Server | `npx pushstate-server build` | Serve production build locally on port 9000 |
-
-### G. Glossary
+### Appendix G — Glossary
 
 | Term | Definition |
-|------|-----------|
-| **CRA** | Create React App — zero-configuration React build toolchain |
-| **HOC** | Higher-Order Component — function that takes a component and returns an enhanced component |
-| **FSM** | Finite State Machine — the mode transition system (`MODE_NONE` → `MODE_SEARCH` / `MODE_CREATE`) |
-| **Prop Injection** | Pattern using `React.Children.map` + `cloneElement` to distribute state as props through the component tree |
-| **StateProvider** | Custom class component serving as the centralized state container (analogous to a Redux store) |
-| **wrapChildrenWith** | Utility function that clones React children with additional props — the primary state distribution mechanism |
-| **objectWithOnly** | Utility function that extracts bound methods from an object — used to select action methods for prop injection |
-| **Unidirectional Data Flow** | Architecture pattern where state flows downward via props and mutations flow upward via callbacks |
+|---|---|
+| **AAP** | Agent Action Plan — the primary directive defining project scope; here, a clarification-request plan with zero in-scope files. |
+| **Clarification request** | The AAP's sole deliverable: a documented determination that the requirement targets a different application, asking the requester to supply the correct repository/requirements. |
+| **SPA** | Single-Page Application — this Todo app is a standalone client-side SPA with no backend. |
+| **CRA** | Create React App — the `react-scripts` build/test toolchain. |
+| **HOC** | Higher-Order Component — e.g., `wrapInputBox` (recompose). |
+| **FSM** | Finite State Machine — the keyboard mode handler (`MODE_CREATE`/`MODE_SEARCH`/`MODE_NONE`). |
+| **Version lock** | The intentional pinning to React 15.x for the educational workshop; must not be upgraded or ejected. |
+| **Path-to-production** | Standard activities (install, build, test, runtime validation, handoff) required to deploy AAP deliverables. |
+
+---
+
+*Generated by the Blitzy Platform. Completion (78.3%) reflects AAP-scoped + path-to-production work only; the out-of-scope Mermaid-editor feature is excluded by design. Brand colors: Completed = Dark Blue `#5B39F3`, Remaining = White `#FFFFFF`.*
